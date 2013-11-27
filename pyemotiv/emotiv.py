@@ -24,7 +24,7 @@ class Epoc(object):
         self.all_data = np.zeros((25,2))
         self.raw = np.zeros((14,2))
         self.gyros = np.zeros((2,2))
-        self.sr = 1/127.94
+        self.sr = 1/128
         self.times = [0.]
         
         #setup access to binaries
@@ -67,7 +67,7 @@ class Epoc(object):
             self.connect()
             
         container = self.aquire(xrange(self.m))
-        self.raw = np.array([container[i] for i in self.raw_channels_idx])
+        self.raw = np.array(container[i] for i in self.raw_channels_idx)
         self.gyros = np.array([container[i] for i in self.gyro_idx])
         self.all_data = container
         return self.all_data
