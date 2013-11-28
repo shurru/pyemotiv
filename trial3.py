@@ -21,7 +21,7 @@ while time<1:
 
 		if type(datarray)!=np.ndarray: 
 			data= epoc.aquire([9]) #gets raw data from channel O1
-			datarray= np.concatenate(datarray, data) 
+			datarray=np.concatenate((datarray, data), axis = 1)
 
 		t=t+1
 	#print "Data: %r \n" %datarray 
@@ -34,7 +34,7 @@ while time<1:
 	#print power
 
 	for i in range (0, len(power)):
-		power_avg.append((power[i][0][0]+ power[i][0][1]+ power[i][0][2]+ power[i][0][3])/4)
+		power_avg.append((power[i][0][0]+ power[i][0][1]+ power[i][0][2]+ power[i][0][3]))
 
 	for i in range (0, len(freqs)):
 		x= freqs[i]
