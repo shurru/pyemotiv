@@ -3,29 +3,36 @@ import numpy as np
 import scipy
 from scipy import fftpack
 from scipy import signal
+from matplotlib import pyplot
 import matplotlib.pyplot as plt
 
 
 epoc=Epoc()
 datarray=[]
 power_avg=[]
+power_store=[]
 time= 0
 
+
 while time<1:
+	print time
+
 	for t in range(0,100):
 		
-		data= epoc.get_raw() #gets raw data from all the channels
+		#data= epoc.get_raw() #gets raw data from all the channels.. unnecessary once connect is made
 		data= epoc.aquire([9]) #gets raw data from channel O1
 
 		datarray.append(data) 
-		t=t+1
 
+		t=t+1
+	#print "Data: %r \n" %datarray 
 	time_step = 1/128.0
 	sampling_freqs = scipy.fftpack.fftfreq(len(datarray), d=time_step)
 	positive_freqs = np.where(sampling_freqs > 0)
 	freqs = sampling_freqs[positive_freqs]
 
 	power= np.abs(scipy.fftpack.fft(signal.detrend(datarray)))[positive_freqs]
+	#print power
 
 	for i in range (0, len(power)):
 		power_avg.append((power[i][0][0]+ power[i][0][1]+ power[i][0][2]+ power[i][0][3])/4)
@@ -33,10 +40,20 @@ while time<1:
 	for i in range (0, len(freqs)):
 		x= freqs[i]
 		y= power_avg[i]
-		print ("Frequency: %r \t Power: %r") %(x,y)
-
+		
+		
+		if x<13.0 and x>7.0 : 
+			print ("Frequency: %r \t Power: %r \n \n") %(x,y)
+			#power_store= power_avg[i]
 
 	time=time+1
+
+	pyplot.plot(freqs, power_avg, '-')
+	#pyplot.title ('FFT')
+	#pyplot.xlabel('Frequency')
+	#pyplot.ylabel('Power')
+	pyplot.savefig('FFT2.png')
+	pyplot.show
 
 
 	#times=epoc.times

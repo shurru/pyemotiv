@@ -88,6 +88,8 @@ class Epoc(object):
         
     def aquire(self,idx):
         nSamples = c_int()
+        if not self.connected:
+            self.connect()
         while True:
             self.edk.EE_DataUpdateHandle(c_uint(0), self.data_handler)
             self.edk.EE_DataGetNumberOfSample(self.data_handler, 
