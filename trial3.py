@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 
 epoc=Epoc()
-datarray=None
+#datarray= None
 power_avg=[]
 power_store=[]
 time= 0
@@ -16,14 +16,17 @@ time= 0
 
 while time<1:
 	print time
+	datarray=np.zeros((1,4)) #resets datarray every time we run the loop
 
 	for t in range(0,100):
 
 		if type(datarray)!=np.ndarray: 
 			data= epoc.aquire([9]) #gets raw data from channel O1
-			datarray=np.concatenate((datarray, data), axis = 1)
+
+			#datarray=np.concatenate((datarray, data), axis = 1)
 
 		t=t+1
+
 	#print "Data: %r \n" %datarray 
 	time_step = 1/128.0
 	sampling_freqs = scipy.fftpack.fftfreq(len(datarray), d=time_step)
