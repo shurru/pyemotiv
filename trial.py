@@ -5,6 +5,7 @@ import time
 from scipy import signal
 from matplotlib import pyplot
 import matplotlib.pyplot as plt
+import math
 
 
 epoc=Epoc()
@@ -14,28 +15,30 @@ power_store=[]
 time= 0
 
 
-while time<3:
+while time<4:
 	print time
 	datarray=np.zeros((1,4)) #resets datarray every time we run the loop
 
-	for t in range(0,100):
+	for t in range(0,200):
 		
 		#data= epoc.get_raw() #gets raw data from all the channels.. unnecessary once connect is made
 		data= epoc.aquire([9]) #gets raw data from channel O1
 		#print data.shape
 		datarray = np.concatenate((datarray, data), axis = 1)
-		
-		#print "Data: %r \n" %datarray
+		#print "Data: %r \n" %datarray[0]
 		t=t+1
 
-	print datarray.shape
+	#print data.shape
 	time_step = 1/128.0
-	sampling_freqs = scipy.fftpack.fftfreq(len(datarray[0]), d=time_step)
-	positive_freqs = np.where(sampling_freqs > 0)
-	freqs = sampling_freqs[positive_freqs]
-	
-	power= np.abs(scipy.fftpack.fft(signal.detrend(datarray[0])))[freqs]
-	
+	sampling_freqs = np.fft.fftfreq(datarray[0].size, d=time_step) #works fine, generates frequency between 0 to 60+ Hz
+	positive_freqs = np.where(sampling_freqs > 0) #gets only the positive frequencies
+	freqs = sampling_freqs[positive_freqs] #generates the frequencies perfectly
+
+	power= np.abs(np.fft.fft((datarray[0])))[positive_freqs]
+	idx= np.argsort(freqs)
+
+	plt.plot(freqs[idx], power[idx]/power.size)
+
 
 	#print signal.detrend(datarray)
 	#print datarray[0].shape
@@ -52,17 +55,18 @@ while time<3:
 		y=power[i]/(power.size)
 		#(power[i][0]+power[i][1]+power[i][2]+power[i][3])/4
 
+		if x<30.0 and x>4.0:
+			print x,y
 		
-		print x,y
 		
 		#if x<12.0 and x>7.0 : 
 			#print ("Frequency: %r \t Power: %r \n \n") %(x,y)
 			#power_store= power_avg[i]
 	
-	pyplot.plot(freqs, power/power.size, '-')
+	#pyplot.plot(freqs, power/power.size, '-')
 	#pyplot.draw()
 	#pyplot.show()
-	pyplot.savefig("haiz.png")		
+	pyplot.savefig("haiz2.png")		
 
 	
 
