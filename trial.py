@@ -23,8 +23,10 @@ while time<4:
 		
 		#data= epoc.get_raw() #gets raw data from all the channels.. unnecessary once connect is made
 		data= epoc.aquire([9]) #gets raw data from channel O1
+		data2= epoc.aquire([16]) #connection on hardware is to AF4:not an issue at all on S/w
 		#print data.shape
 		datarray = np.concatenate((datarray, data), axis = 1)
+		datarray2= np.concatenate((datarray2, data2), axis=1)
 		#print "Data: %r \n" %datarray[0]
 		t=t+1
 

@@ -1,3 +1,4 @@
+#design of the appearance of the entire GUI itself
 from PyQt4 import QtCore, QtGui, Qwt5
 from PyQt4.Qwt5 import QwtPlot
 import sys 
@@ -22,18 +23,26 @@ class Ui_MainWindow(object):
         MainWindow.resize(700, 500)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
+
+        #plotting of the EEG signal itself
         self.eegPlot = QwtPlot(self.centralwidget)
         self.eegPlot.setGeometry(QtCore.QRect(30, 20, 411, 411))
         self.eegPlot.setObjectName(_fromUtf8("EEG Plot"))
+
+        #begin the acquisition of the signal and stop as well 
         self.startEEG = QtGui.QPushButton(self.centralwidget)
         self.startEEG.setGeometry(QtCore.QRect(460, 370, 87, 27))
         self.startEEG.setObjectName(_fromUtf8("Start EEG"))
         self.stopEEG = QtGui.QPushButton(self.centralwidget)
         self.stopEEG.setGeometry(QtCore.QRect(580, 370, 87, 27))
         self.stopEEG.setObjectName(_fromUtf8("Stop EEG"))
-        self.signal= QtGui.QPushButton("Signal")
-        self.signal.setGeometry(QtCore.QRect(600, 370, 87, 27))
-        self.signal.setObjectName(_fromUtf8("Check Signal"))
+        
+
+        #create a menubar(?)
+
+        menubar = QMainWindow.menuBar()
+        fileMenu = menubar.addMenu('&File')
+        fileMenu.addAction(exitAction)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)

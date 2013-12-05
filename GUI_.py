@@ -5,10 +5,12 @@ from PyQt4.QtGui import QApplication, QMainWindow
 import PyQt4.Qwt5 as Qwt
 
 import sys
-from maingui import Ui_MainWindow
+from GUImain import Ui_MainWindow
 import time
 
 class QtEEG(QtCore.QObject):
+
+	#need to add the acquisition module in here 
 	finished_adq = QtCore.pyqtSignal()
 	def __init__(self,mainwindow):
 		super(QtEEG, self).__init__()
@@ -68,17 +70,19 @@ class QtEEG(QtCore.QObject):
 		self.headset.close()
 			
 
-			
+def main():
 
-if __name__ == '__main__':
-	
-	app = QApplication([])
-	window = QMainWindow()
+	#shows the GUI
+	app = QtGui.QApplication([])
+	window = QtGui.QMainWindow()
 	ui = Ui_MainWindow()
 	ui.setupUi(window)
 	window.show()
 
-	
+
+
+if __name__ == '__main__':
+
 	emotivObj = QtEEG(ui)
 	adqThread = QtCore.QThread()
 	emotivObj.moveToThread(adqThread)

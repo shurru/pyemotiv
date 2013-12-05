@@ -110,6 +110,24 @@ class Epoc(object):
             self.times = np.linspace(self.times[-1]+self.sr, 
                                      self.times[-1]+ n*self.sr, n)            
             return container
+    ## Get Contact Quality
+    #
+    # Get the contact quality of a specific sensor.
+    def ContactQuality(self, emostatehandle, sensorid):
+        return self.EmotivEngineDLL.ES_ContactQuality(emostatehandle, sensorid)
+
+
+    ## Get Battery Charge Level
+    #
+    # Get the level of charge remaining in the headset battery.
+   
+    def BatteryCharge(self,emostatehandle):
+        chrglvl     = ctypes.c_int()
+        maxchrglvl  = ctypes.c_int()
+        self.EmotivEngineDLL.BatteryCharge(emostatehandle,ctypes.byref(chrglvl),ctypes.byref(maxchrglvl))
+        returnchrglvl, returnmaxlvl = chrglvl.value , maxchrglvl.value
+        return (returnchrglvl, returnmaxlvl)
+
         
         
 if __name__ == "__main__":
