@@ -1,0 +1,22 @@
+from pyemotiv import Epoc
+import numpy as np
+import scipy
+from scipy import fftpack
+from scipy import signal
+import matplotlib.pyplot as plt
+
+
+epoc=Epoc()
+datarray=None
+power_avg=[]
+time= 0
+
+while time<1:
+	if type(datarray)!=np.ndarray:		
+		#data= epoc.get_raw() #gets raw data from all the channels
+		data= epoc.aquire([9]) #gets raw data from channel O1
+		datarray=np.concatenate(datarray, result)
+		print datarray
+
+		#datarray.append(data) 
+		t=t+1
