@@ -13,6 +13,7 @@ epoc=Epoc()
 power_avg=[]
 power_store=[]
 time= 0
+sth=[]
 
 
 while time<4:
@@ -23,23 +24,26 @@ while time<4:
 		
 		#data= epoc.get_raw() #gets raw data from all the channels.. unnecessary once connect is made
 		data= epoc.aquire([9]) #gets raw data from channel O1
-		data2= epoc.aquire([16]) #connection on hardware is to AF4:not an issue at all on S/w
+		#data2= epoc.aquire([14]) #connection on hardware is to AF4:not an issue at all on S/w
 		#print data.shape
 		datarray = np.concatenate((datarray, data), axis = 1)
-		datarray2= np.concatenate((datarray2, data2), axis=1)
+		#datarray2= np.concatenate((datarray2, data2), axis=1)
+		for i in range(0, len(datarray[0])): 
+			if datarray[0][i]>0: 
+				sth.append(datarray[0][i])
 		#print "Data: %r \n" %datarray[0]
 		t=t+1
 
 	#print data.shape
 	time_step = 1/128.0
-	sampling_freqs = np.fft.fftfreq(datarray[0].size, d=time_step) #works fine, generates frequency between 0 to 60+ Hz
+	sampling_freqs = np.fft.fftfreq(len(sth), d=time_step) #works fine, generates frequency between 0 to 60+ Hz
 	positive_freqs = np.where(sampling_freqs > 0) #gets only the positive frequencies
 	freqs = sampling_freqs[positive_freqs] #generates the frequencies perfectly
 
-	power= np.abs(np.fft.fft((datarray[0])))[positive_freqs]
+	power= np.abs(np.fft.rfft((sth)))[positive_freqs]
 	idx= np.argsort(freqs)
 
-	plt.plot(freqs[idx], power[idx]/power.size)
+	plt.plot(freqs[idx], power[idx])
 
 
 	#print signal.detrend(datarray)
@@ -54,7 +58,7 @@ while time<4:
 
 	for i in range (0, len(freqs)):
 		x= freqs[i]
-		y=power[i]/(power.size)
+		y=power[i]
 		#(power[i][0]+power[i][1]+power[i][2]+power[i][3])/4
 
 		if x<30.0 and x>4.0:

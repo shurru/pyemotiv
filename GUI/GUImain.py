@@ -38,6 +38,12 @@ class Ui_MainWindow(object):
         self.stopEEG.setObjectName(_fromUtf8("Stop EEG"))
         
 
+        #create a menubar(?)
+
+        menubar = QMainWindow.menuBar()
+        fileMenu = menubar.addMenu('&File')
+        fileMenu.addAction(exitAction)
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 707, 24))

@@ -38,7 +38,7 @@ class QtEEG(QtCore.QObject):
 		self.x = np.arange(0,self.timek,1)
 		self.y = [[0] for i in xrange(len(self.datarray[0]))]
 		self.offset = [2500.0*i for i in xrange(len(self.datarray[0]))]
-		
+		self.mutex_stop = Qt.QMutex()
 		self.cancel = False		
 	
 	def addTimeSeries(self,datarray):
@@ -56,7 +56,6 @@ class QtEEG(QtCore.QObject):
 		print('Plotting!!!!')		
 		#gevent.spawn(self.headset.setup)
 		while True:
-			self.mutex_stop = Qt.QMutex()
 			self.mutex_stop.lock()
 			if self.cancel:
 				break
@@ -64,7 +63,7 @@ class QtEEG(QtCore.QObject):
 			self.packet = self.headset.dequeue()
 			if self.packet is not None:
 				for i in xrange(len(self.datarray[0])):
-					#p = self.packet.sensors[self.datarray[0][i]]
+					p = self.packet.sensors[self.datarray[0][i]]
 						
 					self.y[i].append(p['value'])
 					if len(self.y[i]) > self.timek:
