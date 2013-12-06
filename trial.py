@@ -16,11 +16,11 @@ time= 0
 sth=[]
 
 
-while time<4:
+while time<3:
 	print time
 	datarray=np.zeros((1,4)) #resets datarray every time we run the loop
 
-	for t in range(0,200):
+	for t in range(0,100):
 		
 		#data= epoc.get_raw() #gets raw data from all the channels.. unnecessary once connect is made
 		data= epoc.aquire([9]) #gets raw data from channel O1
@@ -40,10 +40,10 @@ while time<4:
 	positive_freqs = np.where(sampling_freqs > 0) #gets only the positive frequencies
 	freqs = sampling_freqs[positive_freqs] #generates the frequencies perfectly
 
-	power= np.abs(np.fft.rfft((sth)))[positive_freqs]
+	power= np.abs(np.fft.fft((sth)))[positive_freqs]
 	idx= np.argsort(freqs)
 
-	plt.plot(freqs[idx], power[idx])
+	plt.plot(freqs[idx], power[idx]/1000)
 
 
 	#print signal.detrend(datarray)
@@ -56,13 +56,13 @@ while time<4:
 	#print power
 	#print power.shape
 
-	for i in range (0, len(freqs)):
-		x= freqs[i]
-		y=power[i]
+	#for i in range (0, len(freqs)):
+		#x= freqs[i]
+		#y=power[i]
 		#(power[i][0]+power[i][1]+power[i][2]+power[i][3])/4
 
-		if x<30.0 and x>4.0:
-			print x,y
+		#if x<30.0 and x>4.0:
+			#print x,y
 		
 		
 		#if x<12.0 and x>7.0 : 
