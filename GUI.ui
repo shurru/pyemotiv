@@ -64,7 +64,7 @@
      <number>80</number>
     </property>
    </widget>
-   <widget class="QPushButton" name="Stop">
+   <widget class="QPushButton" name="btn2">
     <property name="geometry">
      <rect>
       <x>170</x>
@@ -90,7 +90,7 @@
      <string>Exit</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="Start">
+   <widget class="QPushButton" name="btn1">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -116,7 +116,20 @@
      <string>Battery Level</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox">
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>80</y>
+      <width>51</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Refresh</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="O1">
     <property name="geometry">
      <rect>
       <x>180</x>
@@ -168,7 +181,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>Start</sender>
+   <sender>btn1</sender>
    <signal>clicked()</signal>
    <receiver>qwtPlot</receiver>
    <slot>update()</slot>
@@ -184,14 +197,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>Stop</sender>
+   <sender>btn2</sender>
    <signal>clicked()</signal>
    <receiver>qwtPlot</receiver>
    <slot>update()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>287</x>
-     <y>378</y>
+     <y>358</y>
     </hint>
     <hint type="destinationlabel">
      <x>393</x>
@@ -207,7 +220,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>194</x>
-     <y>419</y>
+     <y>399</y>
     </hint>
     <hint type="destinationlabel">
      <x>396</x>

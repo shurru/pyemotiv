@@ -40,11 +40,7 @@ class Ui_MainWindow(object):
 
         #create a menubar(?)
 
-        menubar = QMainWindow.menuBar()
-        fileMenu = menubar.addMenu('&File')
-        fileMenu.addAction(exitAction)
-
-        MainWindow.setCentralWidget(self.centralwidget)
+       	MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 707, 24))
         self.menubar.setObjectName(_fromUtf8("MenuBar"))

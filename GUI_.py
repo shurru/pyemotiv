@@ -5,10 +5,14 @@ from PyQt4.QtGui import QApplication, QMainWindow
 import PyQt4.Qwt5 as Qwt
 
 import sys
-from GUImain import Ui_MainWindow
+import guiplot
 import time
 
 
+class EEGQt(QtCore.QObject): 
+
+	def __init__(self, mainwindow): 
+		super(EEGQt, self).__init__()
 
 class QtEEG(QtCore.QObject):
 	finished_adq = QtCore.pyqtSignal()
