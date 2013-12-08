@@ -44,14 +44,15 @@ class Ui_win_plot(object):
         win_plot.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(win_plot)
+        QtCore.QObject.connect(self.btnD, QtCore.SIGNAL(_fromUtf8("clicked()")), win_plot.close)
         QtCore.QMetaObject.connectSlotsByName(win_plot)
-
+        
     def retranslateUi(self, win_plot):
         win_plot.setWindowTitle(QtGui.QApplication.translate("win_plot", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnA.setText(QtGui.QApplication.translate("win_plot", "A", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnB.setText(QtGui.QApplication.translate("win_plot", "B", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnC.setText(QtGui.QApplication.translate("win_plot", "C", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnD.setText(QtGui.QApplication.translate("win_plot", "D", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnA.setText(QtGui.QApplication.translate("win_plot", "Start", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnB.setText(QtGui.QApplication.translate("win_plot", "Stop", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnC.setText(QtGui.QApplication.translate("win_plot", "FFT", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnD.setText(QtGui.QApplication.translate("win_plot", "Exit", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyQt4 import Qwt5
 
