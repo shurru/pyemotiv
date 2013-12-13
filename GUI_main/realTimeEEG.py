@@ -23,10 +23,10 @@ def plotSomething():
      
     #print (ys_arr)
 
-    #c.setData(xs, ys_arr)
+    c.setData(xs, ys)
     
-    #uiplot.qwtPlot.replot()
-    #epoc.newRecord=False
+    uiplot.qwtPlot.replot()
+    epoc.newRecord=False
     
         
 def contplot(): 

@@ -65,7 +65,10 @@ class EEGRecorder:
                 if datarray[0][i]>0 : 
                     temp.append(datarray[0][i]) 
 
-            print temp
+           
+            global ys
+            ys = temp
+            #print ys
             if forever==False: break
             #print temp.shape
 
@@ -74,11 +77,9 @@ class EEGRecorder:
         #change the way this is visualized. The logic behind it needs to be tweaked
        # print temp
         xs=numpy.arange(0,500)
+        global ys
+        print ys
         
-        rand=[]*500
-        for j in range(0, len(temp)): 
-            rand.append(temp[j])
-        ys= rand
         #print (rand)
         ys=numpy.roll(ys,-1)
 
