@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>737</width>
-    <height>471</height>
+    <width>827</width>
+    <height>581</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,8 +18,8 @@
     <rect>
      <x>330</x>
      <y>30</y>
-     <width>361</width>
-     <height>411</height>
+     <width>461</width>
+     <height>221</height>
     </rect>
    </property>
   </widget>
@@ -167,6 +167,29 @@
    </property>
    <property name="text">
     <string>Data Display</string>
+   </property>
+  </widget>
+  <widget class="QwtPlot" name="qwtPlot_2">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>270</y>
+     <width>461</width>
+     <height>221</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>250</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>FFT Display</string>
    </property>
   </widget>
  </widget>

@@ -10,6 +10,8 @@ import struct
 import threading
 import pylab
 import struct
+import matplotlib.mlab as mlab
+
 
 
 
@@ -46,60 +48,58 @@ class EEGRecorder:
           #need to find a way to empty the array or get it to read from
         while True: 
             if self.threadsDieNow: break
+            global datarray
             datarray=numpy.zeros((1,4))
             
            # print"Lookie"
+            
             epocrec=Epoc()
-            for t in range(0,50):
-                data= epocrec.aquire([9]) #gets raw data from channel O1
-       
-                datarray = numpy.concatenate((datarray, data), axis = 1)
-                # can you do 
-                # datarray[i]=numpy.concatenate((datarray, data), axis = 1)
-                # then stick dataarray into ys. 
-                #i will go from what to what? oh ok 
-                #print len (datarray[0])
-                t=t+1
-            global sth
-            sth= []*len(datarray[0]) 
-
+            
+            data= epocrec.aquire([9]) #gets raw data from channel O1
+            datarray = numpy.concatenate((datarray, data), axis = 1)
+            self.newRecord=True    
+            #print (datarray[0][4], datarray[0][5], datarray[0][6], datarray[0][7])
+            global temp
+            temp= []*4
             for i in range(0, len(datarray[0])):
-                
                 if datarray[0][i]>0 : 
-                    sth.append(datarray[0][i]) 
-                    #sth[i] = datarray[0][i] #so this doesn't work
-                
-                        #sth=[]
-            
+                    temp.append(datarray[0][i]) 
 
-            
-            self.newRecord=True 
-
-
+            print temp
             if forever==False: break
+            #print temp.shape
 
     def rawdata(self): 
-        #print "Yo"
+       
+        #change the way this is visualized. The logic behind it needs to be tweaked
+       # print temp
+        xs=numpy.arange(0,500)
         
-        xs=numpy.arange(0,1000)
-        ys=sth
-        #print len(ys) #need it to stay fixd
-        #global ys
+        rand=[]*500
+        for j in range(0, len(temp)): 
+            rand.append(temp[j])
+        ys= rand
+        #print (rand)
         ys=numpy.roll(ys,-1)
 
+        
         return xs,ys
 
         ### MATH ###
     
     def fft(self): 
-        time_step = 1/128.0
-        sampling_freqs = numpy.fft.fftfreq(len(sth), d=time_step) #works fine, generates frequency between 0 to 60+ Hz
-        positive_freqs = numpy.where(sampling_freqs > 0) #gets only the positive frequencies
-        freqs = sampling_freqs[positive_freqs] #generates the frequencies perfectly
+       fs=128
+       pwr,freqs= mlab.psd(temp, Fs=fs,scale_by_freq= False )
+       #pwr= 10*np.log10(np.abs(pwr))
+    
 
-        power= numpy.abs(numpy.fft.rfft(signal.detrend((sth))))[positive_freqs]
-        #idx= numpy.argsort(freqs)
+       return freqs, pwr
 
-        return freqs, power
+    def batt(self): 
+        epocrec=Epoc()
+        print epocrec.BatteryCharge
+
+        
+
         
     

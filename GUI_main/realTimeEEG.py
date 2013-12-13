@@ -1,4 +1,4 @@
-import ui_plot
+import ui_plot_form 
 from recorder import *
 import sys
 import numpy
@@ -16,21 +16,35 @@ def plotSomething():
     #click a button and it stops updating it
     #click another button. it generates FFT signal
     #print "\n Plotting"
+    #ys_arr= []
     xs,ys=epoc.rawdata()
+
     #print ys
-    c.setData(xs,ys)
-    uiplot.qwtPlot.replot()
-    epoc.newRecord=False
+     
+    #print (ys_arr)
+
+    #c.setData(xs, ys_arr)
+    
+    #uiplot.qwtPlot.replot()
+    #epoc.newRecord=False
+    
+        
+def contplot(): 
+    win_plot.connect(uiplot.timer, QtCore.SIGNAL('timeout()'), plotSomething)   
+
+
 
 def fftplot(): 
     if epoc.newRecord==False: 
         return 
 
-    pwr,freq= epoc.fft()
-    c.setData(pwr,freq)
-    uiplot.qwtplot.replot()
+    freq,pwr= epoc.fft()
+    d.setData(freq,pwr)
+    uiplot.qwtPlot.replot()
     epoc.newRecord=False
 
+def contfftplot(): 
+    win_plot.connect(uiplot.timer, QtCore.SIGNAL('timeout()'), fftplot)
 
 
 
@@ -38,8 +52,9 @@ def fftplot():
 def main(): 
     app = QtGui.QApplication(sys.argv)
     global epoc
-    global c
-    global uiplot
+    global c,d
+    global uiplot, win_plot
+    
 
     epoc=EEGRecorder()
     
@@ -48,24 +63,35 @@ def main():
     epoc.continuousStart() #should start the record function
     #print "Hi"
 
-    win_plot = ui_plot.QtGui.QMainWindow()
-    uiplot = ui_plot.Ui_win_plot()
+    win_plot = ui_plot_form.QtGui.QMainWindow()
+    uiplot = ui_plot_form.Ui_Form()
     uiplot.setupUi(win_plot)
-   #uiplot.btnA.clicked.connect(restart)
-    uiplot.btnB.clicked.connect(epoc.continuousEnd) #when buttonB is clicked, want it to stop
-    uiplot.btnC.clicked.connect(fftplot) #when buttonC is clicked, get it to generate the FFT and plot it
-    #uiplot.btnD.clicked.connect(lambda: uiplot.timer.setInterval(1.0))
-    
+   
+    uiplot.btn2.clicked.connect(epoc.continuousEnd) #when buttonB is clicked, want it to stop
+    uiplot.btn1.clicked.connect(contplot)
+    uiplot.btn3.clicked.connect(contfftplot)
+    uiplot.pushButton_2.clicked.connect(epoc.batt)
+  
     c=Qwt.QwtPlotCurve()  
     c.attach(uiplot.qwtPlot) #attaching the qwtplot to the object 
 
-    
-    #uiplot.qwtPlot.setAxisScale(uiplot.qwtPlot.yLeft, 0, 1000) #are you talking about this?? 
+    d=Qwt.QwtPlotCurve()
+    d.attach(uiplot.qwtPlot_2)
+
+    #fixing the axes for the 2 plots
+
+    uiplot.qwtPlot.setAxisScale(uiplot.qwtPlot.xBottom,0,500) 
+    uiplot.qwtPlot.setAxisScale(uiplot.qwtPlot.yLeft, 3000,6000) 
+    uiplot.qwtPlot_2.setAxisScale(uiplot.qwtPlot.xBottom,0,64) 
+    uiplot.qwtPlot_2.setAxisScale(uiplot.qwtPlot_2.yLeft, 0, 500) 
     
     uiplot.timer = QtCore.QTimer()
     uiplot.timer.start(1.0)
     
-    win_plot.connect(uiplot.timer, QtCore.SIGNAL('timeout()'), plotSomething)
+   
+   
+    
+    
     
     
 
