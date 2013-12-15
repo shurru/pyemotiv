@@ -1,302 +1,245 @@
-	#!/usr/bin/env python
+#!/usr/bin/env python
 
-# Contributed by Tomaz Curk in a bug report showing that the stack order of the
-# curves was dependent on the number of curves. This has been fixed in Qwt.
-#
-# BarCurve is an idea of Tomaz Curk.
-#
-# Beautified and expanded by Gerard Vermeulen.
-
-# for debugging, requires: python configure.py  --trace ...
-if False:
-    import sip
-    sip.settracemask(0x3f)
-
+# The Python version of qwt-5.0/examples/histogram
 
 import random
 import sys
-import PyQt4.Qt as Qt
+from PyQt4 import Qt
 import PyQt4.Qwt5 as Qwt
 
 
-class Spy(Qt.QObject):
+class HistogramItem(Qwt.QwtPlotItem):
+
+    Auto = 0
+    Xfy = 1
     
-    def __init__(self, parent):
-        Qt.QObject.__init__(self, parent)
-        parent.setMouseTracking(True)
-        parent.installEventFilter(self)
+    def __init__(self, *args):
+        Qwt.QwtPlotItem.__init__(self, *args)
+        self.__attributes = HistogramItem.Auto
+        self.__data = Qwt.QwtIntervalData()
+        self.__color = Qt.QColor()
+        self.__reference = 0.0
+        self.setItemAttribute(Qwt.QwtPlotItem.AutoScale, True)
+        self.setItemAttribute(Qwt.QwtPlotItem.Legend, True)
+        self.setZ(20.0)
 
     # __init__()
 
-    def eventFilter(self, _, event):
-        if event.type() == Qt.QEvent.MouseMove:
-            self.emit(Qt.SIGNAL("MouseMove"), event.pos())
-        return False
+    def setData(self, data):
+        self.__data = data
+        self.itemChanged()
 
-    # eventFilter()
+    # setData()
 
-# class Spy
+    def data(self):
+        return self.__data
 
+    # data()
 
-class BarCurve(Qwt.QwtPlotCurve):
+    def setColor(self, color):
+        if self.__color != color:
+            self.__color = color
+            self.itemChanged()
 
-    def __init__(self, penColor=Qt.Qt.black, brushColor=Qt.Qt.white):
-        Qwt.QwtPlotCurve.__init__(self)
-        self.penColor = penColor
-        self.brushColor = brushColor
-        
-    # __init__()
-    
-    def drawFromTo(self, painter, xMap, yMap, start, stop):
-        """Draws rectangles with the corners taken from the x- and y-arrays.
-        """
+    # setColor()
 
-        painter.setPen(Qt.QPen(self.penColor, 2))
-        painter.setBrush(self.brushColor)
-        if stop == -1:
-            stop = self.dataSize()
-        # force 'start' and 'stop' to be even and positive
-        if start & 1:
-            start -= 1
-        if stop & 1:
-            stop -= 1
-        start = max(start, 0)
-        stop = max(stop, 0)
-        for i in range(start, stop, 2):
-            px1 = xMap.transform(self.x(i))
-            py1 = yMap.transform(self.y(i))
-            px2 = xMap.transform(self.x(i+1))
-            py2 = yMap.transform(self.y(i+1))
-            painter.drawRect(px1, py1, (px2 - px1), (py2 - py1))
+    def color(self):
+        return self.__color
 
-    # drawFromTo()
+    # color()
 
-# class BarCurve
-
-
-class BarPlotMainWindow(Qt.QMainWindow):
-
-    colors = (Qt.Qt.red,
-              Qt.Qt.green,
-              Qt.Qt.blue,
-              Qt.Qt.cyan,
-              Qt.Qt.magenta,
-              Qt.Qt.yellow,
-              )
-
-    def __init__(self, parent=None):
-        Qt.QMainWindow.__init__(self, parent)
-
-        # Initialize a QwPlot central widget
-        self.plot = Qwt.QwtPlot(self)
-        self.plot.setTitle('left-click & drag to zoom')
-
-        self.plot.setCanvasBackground(Qt.Qt.white)
-
-        self.plot.plotLayout().setCanvasMargin(0)
-        self.plot.plotLayout().setAlignCanvasToScales(True)
-        self.setCentralWidget(self.plot)
-
-        grid = Qwt.QwtPlotGrid()
-        pen = Qt.QPen(Qt.Qt.DotLine)
-        pen.setColor(Qt.Qt.black)
-        pen.setWidth(0)
-        grid.setPen(pen)
-        grid.attach(self.plot)
-
-        self.__initTracking()
-        self.__initZooming()
-        self.__initToolBar()
-        
-        # Finalize
-        self.counter.setValue(10)
-        self.go(self.counter.value())
-
-    # __init__()
-
-    def __initTracking(self):
-        """Initialize tracking
-        """        
-
-        self.connect(Spy(self.plot.canvas()),
-                     Qt.SIGNAL("MouseMove"),
-                     self.showCoordinates) 
-
-        self.statusBar().showMessage(
-            'Mouse movements in the plot canvas are shown in the status bar')
-
-    # __initTracking()
-
-    def showCoordinates(self, position):
-        self.statusBar().showMessage(
-            'x = %+.6g, y = %.6g'
-            % (self.plot.invTransform(Qwt.QwtPlot.xBottom, position.x()),
-               self.plot.invTransform(Qwt.QwtPlot.yLeft, position.y())))
-
-    # showCoordinates()
-    
-    def __initZooming(self):
-        """Initialize zooming
-        """
-
-        self.zoomer = Qwt.QwtPlotZoomer(Qwt.QwtPlot.xBottom,
-                                        Qwt.QwtPlot.yLeft,
-                                        Qwt.QwtPicker.DragSelection,
-                                        Qwt.QwtPicker.AlwaysOff,
-                                        self.plot.canvas())
-        self.zoomer.setRubberBandPen(Qt.QPen(Qt.Qt.black))
-
-    # __initZooming()
-       
-    def setZoomerMousePattern(self, index):
-        """Set the mouse zoomer pattern.
-        """
-
-        if index == 0:
-            pattern = [
-                Qwt.QwtEventPattern.MousePattern(Qt.Qt.LeftButton,
-                                                 Qt.Qt.NoModifier),
-                Qwt.QwtEventPattern.MousePattern(Qt.Qt.MidButton,
-                                                 Qt.Qt.NoModifier),
-                Qwt.QwtEventPattern.MousePattern(Qt.Qt.RightButton,
-                                                 Qt.Qt.NoModifier),
-                Qwt.QwtEventPattern.MousePattern(Qt.Qt.LeftButton,
-                                                 Qt.Qt.ShiftModifier),
-                Qwt.QwtEventPattern.MousePattern(Qt.Qt.MidButton,
-                                                 Qt.Qt.ShiftModifier),
-                Qwt.QwtEventPattern.MousePattern(Qt.Qt.RightButton,
-                                                 Qt.Qt.ShiftModifier),
-                ]
-            self.zoomer.setMousePattern(pattern)
-        elif index in (1, 2, 3):
-            self.zoomer.initMousePattern(index)
+    def boundingRect(self):
+        result = self.__data.boundingRect()
+        if not result.isvalid():
+            return result
+        if self.testHistogramAttribute(HistogramItem.Xfy):
+            result = Qwt.QwtDoubleRect(result.y(), result.x(),
+                                       result.height(), result.width())
+            if result.left() > self.baseline():
+                result.setLeft(self.baseline())
+            elif result.right() < self.baseline():
+                result.setRight(self.baseline())
         else:
-            raise ValueError, 'index must be in (0, 1, 2, 3)'
+            if result.bottom() < self.baseline():
+                result.setBottom(self.baseline())
+            elif result.top() > self.baseline():
+                result.setTop(self.baseline())
+        return result
 
-    # setZoomerMousePattern()
+    # boundingRect()
 
-    def __initToolBar(self):
-        """Initialize the toolbar
-        """
-        
-        toolBar = Qt.QToolBar(self)
-        self.addToolBar(toolBar)
+    def rtti(self):
+        return Qwt.QwtPlotItem.PlotHistogram
 
-        toolBar.addWidget(Qt.QLabel('Bars', toolBar))
-        self.counter = Qwt.QwtCounter(toolBar)
-        self.counter.setRange(0, 10000, 1)
-        self.counter.setNumButtons(3)
-        toolBar.addWidget(self.counter)
-        toolBar.addSeparator()
+    # rtti()
 
-        toolBar.addWidget(Qt.QLabel('Mouse', toolBar))
-        mouseComboBox = Qt.QComboBox(toolBar)
-        for name in ('3 buttons (PyQwt)',
-                     '1 button',
-                     '2 buttons',
-                     '3 buttons (Qwt)'):
-            mouseComboBox.addItem(name)
-        mouseComboBox.setCurrentIndex(0)
-        toolBar.addWidget(mouseComboBox)
-        toolBar.addSeparator()
-        self.setZoomerMousePattern(0)
+    def draw(self, painter, xMap, yMap, rect):
+        iData = self.data()
+        painter.setPen(self.color())
+        x0 = xMap.transform(self.baseline())
+        y0 = yMap.transform(self.baseline())
+        for i in range(iData.size()):
+            if self.testHistogramAttribute(HistogramItem.Xfy):
+                x2 = xMap.transform(iData.value(i))
+                if x2 == x0:
+                    continue
 
-        toolBar.addAction(Qt.QWhatsThis.createAction(toolBar))
+                y1 = yMap.transform(iData.interval(i).minValue())
+                y2 = yMap.transform(iData.interval(i).maxValue())
 
-        self.plot.canvas().setWhatsThis(
-            'A QwtPlotZoomer lets you zoom infinitely deep '
-            'by saving the zoom states on a stack.\n\n'
-            'You can:\n'
-            '- select a zoom region\n'
-            '- unzoom all\n'
-            '- walk down the stack\n'
-            '- walk up the stack.\n\n'
-            'The combo box in the toolbar lets you attach '
-            'different sets of mouse events to those actions.'
-            )
-        
-        self.counter.setWhatsThis(
-            'Select the number of bars'
-            )
-        
-        mouseComboBox.setWhatsThis(
-            'Configure the zoomer mouse buttons.\n\n'
-            '3 buttons (PyQwt style):\n'
-            '- left-click & drag to zoom\n'
-            '- middle-click to unzoom all\n'
-            '- right-click to walk down the stack\n'
-            '- shift-right-click to walk up the stack.\n'
-            '1 button:\n'
-            '- click & drag to zoom\n'
-            '- control-click to unzoom all\n'
-            '- alt-click to walk down the stack\n'
-            '- shift-alt-click to walk up the stack.\n'
-            '2 buttons:\n'
-            '- left-click & drag to zoom\n'
-            '- right-click to unzoom all\n'
-            '- alt-left-click to walk down the stack\n'
-            '- alt-shift-left-click to walk up the stack.\n'
-            '3 buttons (Qwt style):\n'
-            '- left-click & drag to zoom\n'
-            '- right-click to unzoom all\n'
-            '- middle-click to walk down the stack\n'
-            '- shift-middle-click to walk up the stack.\n\n'
-            'If some of those key combinations interfere with '
-            'your Window manager, press the:\n'
-            '- escape-key to unzoom all\n'
-            '- minus-key to walk down the stack\n'
-            '- plus-key to walk up the stack.'
-            )
+                if y1 > y2:
+                    y1, y2 = y2, y1
+                    
+                if  i < iData.size()-2:
+                    yy1 = yMap.transform(iData.interval(i+1).minValue())
+                    yy2 = yMap.transform(iData.interval(i+1).maxValue())
 
-        self.connect(self.counter,
-                     Qt.SIGNAL('valueChanged(double)'),
-                     self.go)
-        self.connect(mouseComboBox,
-                     Qt.SIGNAL('activated(int)'),
-                     self.setZoomerMousePattern)
+                    if y2 == min(yy1, yy2):
+                        xx2 = xMap.transform(iData.interval(i+1).minValue())
+                        if xx2 != x0 and ((xx2 < x0 and x2 < x0)
+                                          or (xx2 > x0 and x2 > x0)):
+                            # One pixel distance between neighboured bars
+                            y2 += 1
 
-    # __initToolBar()
+                self.drawBar(
+                    painter, Qt.Qt.Horizontal, Qt.QRect(x0, y1, x2-x0, y2-y1))
+            else:
+                y2 = yMap.transform(iData.value(i))
+                if y2 == y0:
+                    continue
 
-    def go(self, value):
-        """Create and plot a sequence of bars taking into account the controls
-        """
+                x1 = xMap.transform(iData.interval(i).minValue())
+                x2 = xMap.transform(iData.interval(i).maxValue())
 
-        n = int(value)
+                if x1 > x2:
+                    x1, x2 = x2, x1
 
-        for bar in self.plot.itemList():
-            if isinstance(bar, BarCurve):
-                bar.detach()
+                if i < iData.size()-2:
+                    xx1 = xMap.transform(iData.interval(i+1).minValue())
+                    xx2 = xMap.transform(iData.interval(i+1).maxValue())
+                    x2 = min(xx1, xx2)
+                    yy2 = yMap.transform(iData.value(i+1))
+                    if x2 == min(xx1, xx2):
+                        if yy2 != 0 and (( yy2 < y0 and y2 < y0)
+                                         or (yy2 > y0 and y2 > y0)):
+                            # One pixel distance between neighboured bars
+                            x2 -= 1
+                
+                self.drawBar(
+                    painter, Qt.Qt.Vertical, Qt.QRect(x1, y0, x2-x1, y2-y0))
 
-        for i in range(n):
-            bar = BarCurve(
-                self.colors[random.randint(0, len(self.colors)-1)],
-                self.colors[random.randint(0, len(self.colors)-1)],
-                )
-            bar.attach(self.plot)
-            bar.setData([i, i+1.4], [0.3*i, 5.0+0.3*i])
+    # draw()
 
-        self.clearZoomStack()
+    def setBaseline(self, reference):
+        if self.baseline() != reference:
+            self.__reference = reference
+            self.itemChanged()
 
-    # go()
-
-    def clearZoomStack(self):
-        """Auto scale and clear the zoom stack
-        """
-
-        self.plot.setAxisAutoScale(Qwt.QwtPlot.xBottom)
-        self.plot.setAxisAutoScale(Qwt.QwtPlot.yLeft)
-        self.plot.replot()
-        self.zoomer.setZoomBase()
-
-    # clearZoomStack()
+    # setBaseLine()
     
-# class BarPlotMainWindow
+    def baseline(self,):
+        return self.__reference
+
+    # baseline()
+
+    def setHistogramAttribute(self, attribute, on = True):
+        if self.testHistogramAttribute(attribute):
+            return
+
+        if on:
+            self.__attributes |= attribute
+        else:
+            self.__attributes &= ~attribute
+
+        self.itemChanged()
+    
+    # setHistogramAttribute()
+
+    def testHistogramAttribute(self, attribute):
+        return bool(self.__attributes & attribute) 
+
+    # testHistogramAttribute()
+
+    def drawBar(self, painter, orientation, rect):
+        painter.save()
+        color = painter.pen().color()
+        r = rect.normalized()
+        factor = 125;
+        light = color.light(factor)
+        dark = color.dark(factor)
+
+        painter.setBrush(color)
+        painter.setPen(Qt.Qt.NoPen)
+        Qwt.QwtPainter.drawRect(painter, r.x()+1, r.y()+1,
+                                r.width()-2, r.height()-2)
+
+        painter.setBrush(Qt.Qt.NoBrush)
+
+        painter.setPen(Qt.QPen(light, 2))
+        Qwt.QwtPainter.drawLine(
+            painter, r.left()+1, r.top()+2, r.right()+1, r.top()+2)
+
+        painter.setPen(Qt.QPen(dark, 2))
+        Qwt.QwtPainter.drawLine(
+            painter, r.left()+1, r.bottom(), r.right()+1, r.bottom())
+
+        painter.setPen(Qt.QPen(light, 1))
+        Qwt.QwtPainter.drawLine(
+            painter, r.left(), r.top() + 1, r.left(), r.bottom())
+        Qwt.QwtPainter.drawLine(
+            painter, r.left()+1, r.top()+2, r.left()+1, r.bottom()-1)
+
+        painter.setPen(Qt.QPen(dark, 1))
+        Qwt.QwtPainter.drawLine(
+            painter, r.right()+1, r.top()+1, r.right()+1, r.bottom())
+        Qwt.QwtPainter.drawLine(
+            painter, r.right(), r.top()+2, r.right(), r.bottom()-1)
+
+        painter.restore()
+
+    # drawBar()
+
+# class HistogramItem
 
 
 def make():
-    demo = BarPlotMainWindow()
-    demo.resize(500, 500)
+    demo = Qwt.QwtPlot()
+    demo.setCanvasBackground(Qt.Qt.white)
+    demo.setTitle("Histogram")
+
+    grid = Qwt.QwtPlotGrid()
+    grid.enableXMin(True)
+    grid.enableYMin(True)
+    grid.setMajPen(Qt.QPen(Qt.Qt.black, 0, Qt.Qt.DotLine));
+    grid.setMinPen(Qt.QPen(Qt.Qt.gray, 0 , Qt.Qt.DotLine));
+     
+    grid.attach(demo)
+
+    histogram = HistogramItem()
+    histogram.setColor(Qt.Qt.darkCyan)
+
+    numValues = 20
+    intervals = []
+    values = Qwt.QwtArrayDouble(numValues)
+
+    pos = 0.0
+    for i in range(numValues):
+        width = 5 + random.randint(0, 4)
+        value = random.randint(0, 99)
+        intervals.append(Qwt.QwtDoubleInterval(pos, pos+width));
+        values[i] = value
+        pos += width
+
+    histogram.setData(Qwt.QwtIntervalData(intervals, values))
+    histogram.attach(demo)
+
+    demo.setAxisScale(Qwt.QwtPlot.yLeft, 0.0, 100.0)
+    demo.setAxisScale(Qwt.QwtPlot.xBottom, 0.0, pos)
+    demo.replot()
+    
+    demo.resize(600, 400)
     demo.show()
+
     return demo
 
 # make()
@@ -310,11 +253,10 @@ def main(args):
 # main()
 
 
-# Admire!
+# Admire
 if __name__ == '__main__':
     main(sys.argv)
 
 # Local Variables: ***
 # mode: python ***
 # End: ***
-

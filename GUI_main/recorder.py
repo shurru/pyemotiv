@@ -44,11 +44,11 @@ class EEGRecorder:
 
             datarray = numpy.zeros((1, 4))
 
-            epocrec = Epoc()
+            #epocrec = Epoc()
 
-            #data = numpy.random.randint(4000, 5000, size=(1, 4))
+            data = numpy.random.randint(4000, 5000, size=(1, 4))
             # gets raw data from channel that is stated in the epoc
-            data = epocrec.aquire([self.chan])
+            #data = epocrec.aquire([self.chan])
             datarray = numpy.concatenate((datarray, data), axis=1)
             self.newRecord = True
 
@@ -57,7 +57,7 @@ class EEGRecorder:
                 if datarray[0][i] > 0:
                     temp.append(datarray[0][i])
 
-            self.ys = numpy.roll(self.ys, -4)
+            self.ys = numpy.roll(self.ys, 4)
             for i in xrange(0, 4):
                 self.ys[508 + i] = temp[i]
 

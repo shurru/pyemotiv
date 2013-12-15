@@ -40,7 +40,7 @@ def fftplot():
             if freq[i] < 13 and freq[i] > 7:
                 alpha_pwr.append(pwr[i])
                 max_alpha = max(alpha_pwr)
-
+    e.setData(max_alpha)
     # print max_alpha
     #e.drawFromTo(0, max_alpha, 0, 1)
 
@@ -78,8 +78,9 @@ def main():
     d = Qwt.QwtPlotCurve()
     d.attach(uiplot.qwtPlot_2)
 
-    #e = BarPlot.BarCurve()
-    # e.attach(uiplot.qwtPlot_3)
+    e = BarPlot.HistogramItem()
+
+    e.attach(uiplot.qwtPlot_3)
 
     # fixing the axes for the 2 plots
 
@@ -97,7 +98,7 @@ def main():
     # DISPLAY WINDOWS
     win_plot.show()
     code = app.exec_()
-   
+
     sys.exit(code)
 
 
