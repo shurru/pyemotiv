@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1078</width>
-    <height>645</height>
+    <width>800</width>
+    <height>639</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QwtPlot" name="qwtPlot">
    <property name="geometry">
     <rect>
-     <x>350</x>
-     <y>30</y>
-     <width>421</width>
+     <x>340</x>
+     <y>40</y>
+     <width>441</width>
      <height>241</height>
     </rect>
    </property>
@@ -27,9 +27,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>140</y>
+     <y>0</y>
      <width>301</width>
-     <height>411</height>
+     <height>301</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -67,9 +67,9 @@
    <widget class="QPushButton" name="btn2">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>320</y>
-      <width>101</width>
+      <x>150</x>
+      <y>240</y>
+      <width>111</width>
       <height>23</height>
      </rect>
     </property>
@@ -80,8 +80,8 @@
    <widget class="QPushButton" name="Exit">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>360</y>
+      <x>150</x>
+      <y>270</y>
       <width>101</width>
       <height>23</height>
      </rect>
@@ -93,8 +93,8 @@
    <widget class="QPushButton" name="btn1">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>320</y>
+      <x>0</x>
+      <y>240</y>
       <width>141</width>
       <height>23</height>
      </rect>
@@ -132,21 +132,34 @@
    <widget class="QPushButton" name="btn3">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>290</y>
-      <width>101</width>
-      <height>23</height>
+      <x>0</x>
+      <y>270</y>
+      <width>141</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
      <string>FFT</string>
     </property>
    </widget>
+   <widget class="QCheckBox" name="filter_check">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>100</y>
+      <width>70</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Filter</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>360</x>
+     <x>320</x>
      <y>10</y>
      <width>71</width>
      <height>16</height>
@@ -159,9 +172,9 @@
   <widget class="QwtPlot" name="qwtPlot_2">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>340</y>
-     <width>441</width>
+     <x>360</x>
+     <y>380</y>
+     <width>421</width>
      <height>221</height>
     </rect>
    </property>
@@ -169,8 +182,8 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>310</y>
+     <x>350</x>
+     <y>350</y>
      <width>71</width>
      <height>16</height>
     </rect>
@@ -182,24 +195,50 @@
   <widget class="QwtPlot" name="qwtPlot_3">
    <property name="geometry">
     <rect>
-     <x>790</x>
-     <y>180</y>
-     <width>261</width>
-     <height>281</height>
+     <x>10</x>
+     <y>330</y>
+     <width>321</width>
+     <height>291</height>
     </rect>
    </property>
   </widget>
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
-     <x>790</x>
-     <y>160</y>
+     <x>20</x>
+     <y>310</y>
      <width>101</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
     <string>Alpha Power</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>280</y>
+     <width>46</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Samples</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>600</y>
+     <width>51</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Frequency</string>
    </property>
   </widget>
  </widget>
@@ -258,6 +297,22 @@
     <hint type="destinationlabel">
      <x>396</x>
      <y>432</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>filter_check</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>qwtPlot_3</receiver>
+   <slot>update()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>244</x>
+     <y>108</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>170</x>
+     <y>475</y>
     </hint>
    </hints>
   </connection>
