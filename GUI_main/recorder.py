@@ -22,6 +22,7 @@ class EEGRecorder:
         self.newRecord = False
         self.ys = numpy.array([0 for i in xrange(0, 512)])
         #self.chan = chan
+        self.filter_checker=False
 
     # RECORDING THE EEG stream ###
     # get the EEG signal. Getting the raw EEG data and appending to ys
@@ -57,7 +58,7 @@ class EEGRecorder:
                 if datarray[0][i] > 0:
                     temp.append(datarray[0][i])
 
-            self.ys = numpy.roll(self.ys, 4)
+            self.ys = numpy.roll(self.ys, -4)
             for i in xrange(0, 4):
                 self.ys[508 + i] = temp[i]
 
@@ -69,15 +70,26 @@ class EEGRecorder:
 
         # MATH ###
 
+    def filterchange(self): 
+        self.filter_checker=True
+
+
+
 
     def fft(self):
         fs = 128
         pwr, freqs = mlab.psd(self.ys, Fs=fs, scale_by_freq=False)
         # pwr= 10*numpy.log10(numpy.abs(pwr))
 
-        # lolol high pass. Filters until 2 Hz.
-        for i in xrange(0, 2):
+        # lolol high pass. Filters until 3 Hz.
+        for i in xrange(0, 6):
             pwr[i] = 0
+
+        if self.filter_checker== True: 
+            for i in xrange(0, 6):
+                pwr[i] = 0
+            for j in xrange(62,129): 
+                pwr[j]=0
 
         return freqs, pwr
 

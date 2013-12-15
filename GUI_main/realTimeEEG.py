@@ -1,6 +1,6 @@
 import ui_plot_form
 from recorder import *
-import BarPlot
+#import BarPlot
 import sys
 import numpy
 from PyQt4 import QtCore, QtGui
@@ -35,16 +35,17 @@ def fftplot():
     d.setData(freq, pwr)
     uiplot.qwtPlot_2.replot()
 
-    alpha_pwr = []
-    for i in xrange(0, len(pwr)):
-            if freq[i] < 13 and freq[i] > 7:
-                alpha_pwr.append(pwr[i])
-                max_alpha = max(alpha_pwr)
-    e.setData(max_alpha)
+    # alpha_pwr = []
+    # for i in xrange(0, len(pwr)):
+    #         if freq[i] < 13 and freq[i] > 7:
+    #             alpha_pwr.append(pwr[i])
+    #             max_alpha = max(alpha_pwr)
+    # e.setData(max_alpha)
     # print max_alpha
     #e.drawFromTo(0, max_alpha, 0, 1)
 
     epoc.newRecord = False
+        
 
 
 def contfftplot():
@@ -70,6 +71,9 @@ def main():
     uiplot.btn2.clicked.connect(epoc.continuousEnd)
     uiplot.btn1.clicked.connect(contplot)
     uiplot.btn3.clicked.connect(contfftplot)
+    uiplot.filter_check.stateChanged.connect(epoc.filterchange)
+    #uiplot.filter_check.stateChanged.connect(epoc.filterdef)
+
     # uiplot.pushButton_2.clicked.connect(epoc.batt)
 
     c = Qwt.QwtPlotCurve()
@@ -78,9 +82,10 @@ def main():
     d = Qwt.QwtPlotCurve()
     d.attach(uiplot.qwtPlot_2)
 
-    e = BarPlot.HistogramItem()
-
-    e.attach(uiplot.qwtPlot_3)
+    # #creating a bar graph
+    # e = BarPlot.HistogramItem()
+    # e.setColor(Qt.Qt.darkCyan)
+    # e.attach(uiplot.qwtPlot_3)
 
     # fixing the axes for the 2 plots
 
