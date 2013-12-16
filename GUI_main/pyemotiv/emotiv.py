@@ -48,6 +48,7 @@ class Epoc(object):
         eEvent = self.edk.EE_EmoEngineEventCreate()
         state = self.edk.EE_EngineGetNextEvent(eEvent)
         t0 = time.time()
+        
         while not self.connected:
             state = self.edk.EE_EngineGetNextEvent(eEvent)
             if not state:

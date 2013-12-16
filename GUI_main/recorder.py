@@ -20,9 +20,10 @@ class EEGRecorder:
 
         self.threadsDieNow = False  # threading
         self.newRecord = False
-        self.ys = numpy.array([0 for i in xrange(0, 512)])
-        #self.chan = chan
+        self.ys = numpy.array([0 for i in xrange(0, 256)])
+        self.chan = chan
         self.filter_checker=False
+        self.fftcheck= False
 
     # RECORDING THE EEG stream ###
     # get the EEG signal. Getting the raw EEG data and appending to ys
@@ -45,11 +46,12 @@ class EEGRecorder:
 
             datarray = numpy.zeros((1, 4))
 
-            #epocrec = Epoc()
+            epocrec = Epoc()
+            epocrec.connect()
 
-            data = numpy.random.randint(4000, 5000, size=(1, 4))
+            #data = numpy.random.randint(4000, 5000, size=(1, 4))
             # gets raw data from channel that is stated in the epoc
-            #data = epocrec.aquire([self.chan])
+            data = epocrec.aquire([self.chan])
             datarray = numpy.concatenate((datarray, data), axis=1)
             self.newRecord = True
 
@@ -60,10 +62,10 @@ class EEGRecorder:
 
             self.ys = numpy.roll(self.ys, -4)
             for i in xrange(0, 4):
-                self.ys[508 + i] = temp[i]
+                self.ys[252 + i] = temp[i]
 
-            import time
-            time.sleep(0.015)
+            # import time
+            # time.sleep(0.015)
 
             if not forever:
                 break
@@ -77,7 +79,8 @@ class EEGRecorder:
 
 
     def fft(self):
-        fs = 128
+        self.fftcheck=True
+        fs = 64
         pwr, freqs = mlab.psd(self.ys, Fs=fs, scale_by_freq=False)
         # pwr= 10*numpy.log10(numpy.abs(pwr))
 
@@ -93,10 +96,6 @@ class EEGRecorder:
 
         return freqs, pwr
 
-    def alpha(self): 
-        fs = 128
-        pwr, freqs = mlab.psd(self.ys, Fs=fs, scale_by_freq=False)
-
-
+    
 
 

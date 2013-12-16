@@ -11,10 +11,10 @@ from pyemotiv import Epoc
 # epoc=Epoc()
 
 def plotSomething():
-    if epoc.newRecord == False:
+    if epoc.newRecord == False or  epoc.fftcheck== True:
         return
 
-    xs = numpy.arange(0, 511)
+    xs = numpy.arange(0, 255)
 
     c.setData(xs, epoc.ys)
     uiplot.qwtPlot.replot()
@@ -24,6 +24,7 @@ def plotSomething():
 
 def contplot():
     epoc.threadsDieNow = False
+    epoc.newRecord=True
     win_plot.connect(uiplot.timer, QtCore.SIGNAL('timeout()'), plotSomething)
 
 
@@ -89,13 +90,13 @@ def main():
 
     # fixing the axes for the 2 plots
 
-    uiplot.qwtPlot.setAxisScale(uiplot.qwtPlot.xBottom, 0, 500)
-    uiplot.qwtPlot.setAxisScale(uiplot.qwtPlot.yLeft, 3000, 6000)
-    uiplot.qwtPlot_2.setAxisScale(uiplot.qwtPlot_2.xBottom, 0, 64)
-    uiplot.qwtPlot_2.setAxisScale(uiplot.qwtPlot_2.yLeft, 0, 1e6)
+    uiplot.qwtPlot.setAxisScale(uiplot.qwtPlot.xBottom, 0, 250)
+    uiplot.qwtPlot.setAxisScale(uiplot.qwtPlot.yLeft, 0, 6000)
+    uiplot.qwtPlot_2.setAxisScale(uiplot.qwtPlot_2.xBottom, 0, 32)
+    #uiplot.qwtPlot_2.setAxisScale(uiplot.qwtPlot_2.yLeft, 0, 1e6)
     uiplot.qwtPlot_3.setAxisScale(uiplot.qwtPlot_3.xBottom, 0, 1)
     uiplot.qwtPlot_3.setAxisScale(uiplot.qwtPlot_2.yLeft, 0, 10000)
-    # uiplot.qwtPlot_2.setAxisAutoScale(1)
+    uiplot.qwtPlot_2.setAxisAutoScale(1)
 
     uiplot.timer = QtCore.QTimer()
     uiplot.timer.start(1.0)
