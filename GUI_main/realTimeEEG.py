@@ -11,7 +11,7 @@ from pyemotiv import Epoc
 # epoc=Epoc()
 
 def plotSomething():
-    if epoc.newRecord == False or  epoc.fftcheck== True:
+    if epoc.newRecord == False or  epoc.fftcheck== True or epoc.plot_check==False:
         return
 
     xs = numpy.arange(0, 511)
@@ -25,31 +25,44 @@ def plotSomething():
 def contplot():
     epoc.threadsDieNow = False
     epoc.newRecord=True
+    epoc.plot_check=True
     win_plot.connect(uiplot.timer, QtCore.SIGNAL('timeout()'), plotSomething)
 
 
 def fftplot():
-    if epoc.newRecord == False:
+    if epoc.newRecord == False :
         return
 
     freq, pwr = epoc.fft()
     d.setData(freq, pwr)
     uiplot.qwtPlot_2.replot()
 
-    # alpha_pwr = []
-    # for i in xrange(0, len(pwr)):
-    #         if freq[i] < 13 and freq[i] > 7:
-    #             alpha_pwr.append(pwr[i])
-    #             max_alpha = max(alpha_pwr)
-    # e.setData(max_alpha)
-    # print max_alpha
-    #e.drawFromTo(0, max_alpha, 0, 1)
-
+    alpha_pwr = []
+    for i in xrange(0, len(pwr)):
+        if freq[i] < 13 and freq[i] > 7:
+            alpha_pwr.append(pwr[i])
+    max_alpha = max(alpha_pwr)
+    e.setData(max_alpha)
+    e.draw(0, 0, 1)
+    #print max(pwr)
+    # if max_alpha> max(pwr):
+    #     print "OMG Pain!"
+    
     epoc.newRecord = False
+
+def filtercheck(): 
+    state= uiplot.filter_check.checkState()
+    if state ==0: #when the checkbutton is left unpressed
+        epoc.filter_checker=False
         
-
-
+    if state==2:  #when checkbutton is clicked
+        epoc.filter_checker=True
+        
+    
 def contfftplot():
+    epoc.fftcheck=True
+    epoc.newRecord=True
+
     win_plot.connect(uiplot.timer, QtCore.SIGNAL('timeout()'), fftplot)
 
 
@@ -72,9 +85,9 @@ def main():
     uiplot.btn2.clicked.connect(epoc.continuousEnd)
     uiplot.btn1.clicked.connect(contplot)
     uiplot.btn3.clicked.connect(contfftplot)
-    uiplot.filter_check.stateChanged.connect(epoc.filterchange)
-    #uiplot.filter_check.stateChanged.connect(epoc.filterdef)
+    uiplot.filter_check.stateChanged.connect(filtercheck)
 
+    
     # uiplot.pushButton_2.clicked.connect(epoc.batt)
 
     c = Qwt.QwtPlotCurve()
@@ -88,11 +101,12 @@ def main():
     # e.setColor(Qt.Qt.darkCyan)
     # e.attach(uiplot.qwtPlot_3)
 
+    #print epoc.plot_check
     # fixing the axes for the 2 plots
 
     uiplot.qwtPlot.setAxisScale(uiplot.qwtPlot.xBottom, 0, 512)
     uiplot.qwtPlot.setAxisScale(uiplot.qwtPlot.yLeft, 0, 6000)
-    uiplot.qwtPlot_2.setAxisScale(uiplot.qwtPlot_2.xBottom, 0, 32)
+    uiplot.qwtPlot_2.setAxisScale(uiplot.qwtPlot_2.xBottom, 0, 64)
     #uiplot.qwtPlot_2.setAxisScale(uiplot.qwtPlot_2.yLeft, 0, 1e6)
     uiplot.qwtPlot_3.setAxisScale(uiplot.qwtPlot_3.xBottom, 0, 1)
     uiplot.qwtPlot_3.setAxisScale(uiplot.qwtPlot_2.yLeft, 0, 10000)

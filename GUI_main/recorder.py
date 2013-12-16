@@ -24,6 +24,7 @@ class EEGRecorder:
         self.chan = chan
         self.filter_checker=False
         self.fftcheck= False
+        self.plot_check=True
 
     # RECORDING THE EEG stream ###
     # get the EEG signal. Getting the raw EEG data and appending to ys
@@ -41,7 +42,8 @@ class EEGRecorder:
 
     def record(self, forever=True):
         epocrec = Epoc()
-        epocrec.connect()   
+        epocrec.connect()  
+
         while True:
             if self.threadsDieNow:
                 break
@@ -71,14 +73,11 @@ class EEGRecorder:
 
         # MATH ###
 
-    def filterchange(self): 
-        self.filter_checker=True
-
-
-
+    
 
     def fft(self):
         self.fftcheck=True
+        self.plot_check=False 
         fs = 128
         pwr, freqs = mlab.psd(self.ys, Fs=fs, scale_by_freq=False)
         # pwr= 10*numpy.log10(numpy.abs(pwr))
@@ -90,8 +89,12 @@ class EEGRecorder:
         if self.filter_checker== True: 
             for i in xrange(0, 6):
                 pwr[i] = 0
-            for j in xrange(62,129): 
+            for j in xrange(61,129): 
                 pwr[j]=0
+
+        elif self.filter_checker==False: 
+            for k in xrange(6, len(pwr)):
+                pwr[k]=pwr[k]
 
         return freqs, pwr
 

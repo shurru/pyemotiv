@@ -160,7 +160,7 @@ class HistogramItem(Qwt.QwtPlotItem):
 
     # testHistogramAttribute()
 
-    def drawBar(self, painter, orientation, rect):
+    def drawBar(self, painter, rect):
         painter.save()
         color = painter.pen().color()
         r = rect.normalized()
