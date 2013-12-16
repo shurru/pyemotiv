@@ -41,8 +41,8 @@ class EEGRecorder:
         self.threadsDieNow = True
 
     def record(self, forever=True):
-        epocrec = Epoc()
-        epocrec.connect()  
+        #epocrec = Epoc()
+        #epocrec.connect()  
 
         while True:
             if self.threadsDieNow:
@@ -50,9 +50,9 @@ class EEGRecorder:
 
             datarray = numpy.zeros((1, 4))
 
-            #data = numpy.random.randint(4000, 5000, size=(1, 4))
+            data = numpy.random.randint(4000, 5000, size=(1, 4))
             # gets raw data from channel that is stated in the epoc
-            data = epocrec.aquire([self.chan])
+            #data = epocrec.aquire([self.chan])
             datarray = numpy.concatenate((datarray, data), axis=1)
             self.newRecord = True
 
@@ -83,18 +83,17 @@ class EEGRecorder:
         # pwr= 10*numpy.log10(numpy.abs(pwr))
 
         # lolol high pass. Filters until 3 Hz.
-        for i in xrange(0, 6):
-            pwr[i] = 0
+        if self.filter_checker==False: 
+            for i in xrange(0, 6):
+                pwr[i] = 0
 
-        if self.filter_checker== True: 
+        elif self.filter_checker== True: 
             for i in xrange(0, 6):
                 pwr[i] = 0
             for j in xrange(61,129): 
                 pwr[j]=0
 
-        elif self.filter_checker==False: 
-            for k in xrange(6, len(pwr)):
-                pwr[k]=pwr[k]
+        
 
         return freqs, pwr
 
