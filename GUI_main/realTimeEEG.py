@@ -14,7 +14,7 @@ def plotSomething():
     if epoc.newRecord == False or  epoc.fftcheck== True:
         return
 
-    xs = numpy.arange(0, 255)
+    xs = numpy.arange(0, 511)
 
     c.setData(xs, epoc.ys)
     uiplot.qwtPlot.replot()
@@ -90,7 +90,7 @@ def main():
 
     # fixing the axes for the 2 plots
 
-    uiplot.qwtPlot.setAxisScale(uiplot.qwtPlot.xBottom, 0, 250)
+    uiplot.qwtPlot.setAxisScale(uiplot.qwtPlot.xBottom, 0, 512)
     uiplot.qwtPlot.setAxisScale(uiplot.qwtPlot.yLeft, 0, 6000)
     uiplot.qwtPlot_2.setAxisScale(uiplot.qwtPlot_2.xBottom, 0, 32)
     #uiplot.qwtPlot_2.setAxisScale(uiplot.qwtPlot_2.yLeft, 0, 1e6)

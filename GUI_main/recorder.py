@@ -20,7 +20,7 @@ class EEGRecorder:
 
         self.threadsDieNow = False  # threading
         self.newRecord = False
-        self.ys = numpy.array([0 for i in xrange(0, 256)])
+        self.ys = numpy.array([0 for i in xrange(0, 512)])
         self.chan = chan
         self.filter_checker=False
         self.fftcheck= False
@@ -40,14 +40,13 @@ class EEGRecorder:
         self.threadsDieNow = True
 
     def record(self, forever=True):
+        epocrec = Epoc()
+        epocrec.connect()   
         while True:
             if self.threadsDieNow:
                 break
 
             datarray = numpy.zeros((1, 4))
-
-            epocrec = Epoc()
-            epocrec.connect()
 
             #data = numpy.random.randint(4000, 5000, size=(1, 4))
             # gets raw data from channel that is stated in the epoc
@@ -62,7 +61,7 @@ class EEGRecorder:
 
             self.ys = numpy.roll(self.ys, -4)
             for i in xrange(0, 4):
-                self.ys[252 + i] = temp[i]
+                self.ys[508 + i] = temp[i]
 
             # import time
             # time.sleep(0.015)
@@ -80,7 +79,7 @@ class EEGRecorder:
 
     def fft(self):
         self.fftcheck=True
-        fs = 64
+        fs = 128
         pwr, freqs = mlab.psd(self.ys, Fs=fs, scale_by_freq=False)
         # pwr= 10*numpy.log10(numpy.abs(pwr))
 
