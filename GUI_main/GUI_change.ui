@@ -155,6 +155,32 @@
      <string>Filter</string>
     </property>
    </widget>
+   <widget class="QCheckBox" name="O1_check">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>150</y>
+      <width>70</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>O1</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="O2_check">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>170</y>
+      <width>70</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>O2</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
@@ -192,21 +218,11 @@
     <string>FFT Display</string>
    </property>
   </widget>
-  <widget class="QwtPlot" name="qwtPlot_3">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>330</y>
-     <width>321</width>
-     <height>291</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>310</y>
+     <y>330</y>
      <width>101</width>
      <height>16</height>
     </rect>
@@ -239,6 +255,16 @@
    </property>
    <property name="text">
     <string>Frequency</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="alpha_widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>360</y>
+     <width>291</width>
+     <height>241</height>
+    </rect>
    </property>
   </widget>
  </widget>
@@ -297,22 +323,6 @@
     <hint type="destinationlabel">
      <x>396</x>
      <y>432</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>filter_check</sender>
-   <signal>stateChanged(int)</signal>
-   <receiver>qwtPlot_3</receiver>
-   <slot>update()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>244</x>
-     <y>108</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>170</x>
-     <y>475</y>
     </hint>
    </hints>
   </connection>

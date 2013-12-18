@@ -1,14 +1,15 @@
 import ui_plot_form
 from recorder import *
-import BarPlot
+import equalizer
+import ex2
 import sys
 import numpy
 from PyQt4 import QtCore, QtGui
 import PyQt4.Qwt5 as Qwt
 from pyemotiv import Epoc
+import matplotlib
 
-
-# epoc=Epoc()
+# global epoc
 
 def plotSomething():
     if epoc.newRecord == False or epoc.fftcheck == True or epoc.plot_check == False:
@@ -39,14 +40,53 @@ def fftplot():
 
     alpha_pwr = []
     max_alpha=[]
+    
     for i in xrange(0, len(pwr)):
         if freq[i] < 13 and freq[i] > 7:
             alpha_pwr.append(pwr[i])
-    max_alpha.append(max(alpha_pwr))
+    max_alpha.append( max(alpha_pwr))
+    #max_alpha= max(alpha_pwr)
 
-    x=numpy.arange(0,200)
-    e.setData(x,  max_alpha)
-    uiplot.qwtPlot_3.replot()
+    #print max_alpha
+    
+
+    # so we know this works
+    #now we need to see how to put this on to the widget. It's a matplotlib figure now
+    epoc.animate(max_alpha) #this returns a figure which needs to be plotted in the widget
+    
+    #mw = ex2.Window()
+    # mw.plot(max_alpha)
+    # mw.show()
+    # import time 
+    # time.sleep(0.01)
+    #print "why you being a bitch"
+    #mw.attach(uiplot.qwtPlot_3)
+    # subplot = mw.getFigure().add_subplot(111)
+    # subplot.plot()
+    #mw.draw()
+
+    #e.paintEvent()
+    # qp = QtGui.QPainter()
+    # #e= uiplot.qwtplot_3
+    # qp.begin(e)
+    # qp.drawRect(10, 15, 90, max_alpha[0])
+    
+    # e=bardraw.BarCurve(max_alpha)
+    # #e.create_main_frame()
+    # e.show()
+
+
+   
+    
+   
+    # qp=QtGui.QPainter()
+    # qp.setBrush(QtGui.QColor(200, 0, 0))
+    # qp.drawRect(10, 330, 30, max_alpha)
+
+    
+    #e.attach(uiplot.qwtPlot_3)
+    # e.setData([0,1], max_alpha)
+    # e.drawFromTo(qp,0, max_alpha, 0, 1)
     # print max(pwr)
     # if max_alpha> max(pwr):
     #     print "OMG Pain!"
@@ -62,6 +102,19 @@ def filtercheck():
     if state == 2:  # when checkbutton is clicked
         epoc.filter_checker = True
 
+# def channelcheck(): 
+#     O1state= uiplot.O1_check.checkState()
+#     O2state= uiplot.O2_check.checkState()
+
+#     if O1state==2 and O2state==0: 
+#         epoc=EEGRecorder()
+#     if O2state==2 and O1state==0: 
+#         epoc=EEGRecorder(14)
+#     if O1state==2 and O2state==2: 
+#         break
+#     if O1state==0 and O2state==0: 
+#         break
+
 
 def contfftplot():
     epoc.fftcheck = True
@@ -76,6 +129,7 @@ def main():
     global c, d, e
     global uiplot, win_plot
 
+    #channelcheck()
     epoc = EEGRecorder()
     #epoc2 = EEGRecorder(10)
 
@@ -99,10 +153,12 @@ def main():
     d.attach(uiplot.qwtPlot_2)
 
     # creating a bar graph
-    e = Qwt.QwtPlotCurve()
-    e.attach(uiplot.qwtPlot_3)
+    
 
-    # print epoc.plot_check
+
+
+
+
     # fixing the axes for the 2 plots
 
     uiplot.qwtPlot.setAxisScale(uiplot.qwtPlot.xBottom, 0, 512)
@@ -112,8 +168,7 @@ def main():
     #uiplot.qwtPlot_3.setAxisScale(uiplot.qwtPlot_3.xBottom, 0, 1)
     # uiplot.qwtPlot_3.setAxisAutoScale(uiplot.qwtPlot_2.yLeft, 0, 10000)
     uiplot.qwtPlot_2.setAxisAutoScale(1)
-    uiplot.qwtPlot_3.setAxisAutoScale(1)
-    uiplot.qwtPlot_3.setAxisAutoScale(0)
+   
 
     uiplot.timer = QtCore.QTimer()
     uiplot.timer.start(1.0)

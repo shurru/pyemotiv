@@ -1,6 +1,7 @@
 from pyemotiv import Epoc
 
 import matplotlib
+import matplotlib.pyplot as plt
 matplotlib.use('TkAgg')  # <-- THIS MAKES IT FAST!
 import numpy
 from scipy import signal
@@ -68,12 +69,25 @@ class EEGRecorder:
             # import time
             # time.sleep(0.015)
 
+
+
             if not forever:
                 break
 
         # MATH ###
 
-    
+    def animate(self, data): 
+        fig = plt.figure()
+        N=1
+
+        self.data_an= data
+        rects = plt.bar(range(N), self.data_an, align='center')
+
+        for rect, h in zip(rects, self.data_an):
+            rect.set_height(h)
+        fig.canvas.draw()
+        
+        return fig 
 
     def fft(self):
         self.fftcheck=True

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '.\GUI_change.ui'
 #
-# Created: Sat Dec 14 22:38:06 2013
+# Created: Tue Dec 17 18:46:54 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -63,6 +63,12 @@ class Ui_Form(object):
         self.filter_check = QtGui.QCheckBox(self.frame)
         self.filter_check.setGeometry(QtCore.QRect(200, 100, 70, 17))
         self.filter_check.setObjectName(_fromUtf8("filter_check"))
+        self.O1_check = QtGui.QCheckBox(self.frame)
+        self.O1_check.setGeometry(QtCore.QRect(200, 150, 70, 17))
+        self.O1_check.setObjectName(_fromUtf8("O1_check"))
+        self.O2_check = QtGui.QCheckBox(self.frame)
+        self.O2_check.setGeometry(QtCore.QRect(200, 170, 70, 17))
+        self.O2_check.setObjectName(_fromUtf8("O2_check"))
         self.label = QtGui.QLabel(Form)
         self.label.setGeometry(QtCore.QRect(320, 10, 71, 16))
         self.label.setObjectName(_fromUtf8("label"))
@@ -72,11 +78,8 @@ class Ui_Form(object):
         self.label_3 = QtGui.QLabel(Form)
         self.label_3.setGeometry(QtCore.QRect(350, 350, 71, 16))
         self.label_3.setObjectName(_fromUtf8("label_3"))
-        self.qwtPlot_3 = Qwt5.QwtPlot(Form)
-        self.qwtPlot_3.setGeometry(QtCore.QRect(10, 330, 321, 291))
-        self.qwtPlot_3.setObjectName(_fromUtf8("qwtPlot_3"))
         self.label_4 = QtGui.QLabel(Form)
-        self.label_4.setGeometry(QtCore.QRect(20, 310, 101, 16))
+        self.label_4.setGeometry(QtCore.QRect(20, 330, 101, 16))
         self.label_4.setObjectName(_fromUtf8("label_4"))
         self.label_5 = QtGui.QLabel(Form)
         self.label_5.setGeometry(QtCore.QRect(520, 280, 46, 13))
@@ -84,12 +87,14 @@ class Ui_Form(object):
         self.label_6 = QtGui.QLabel(Form)
         self.label_6.setGeometry(QtCore.QRect(540, 600, 51, 20))
         self.label_6.setObjectName(_fromUtf8("label_6"))
+        self.alpha_widget = QtGui.QWidget(Form)
+        self.alpha_widget.setGeometry(QtCore.QRect(20, 360, 291, 241))
+        self.alpha_widget.setObjectName(_fromUtf8("alpha_widget"))
 
         self.retranslateUi(Form)
         QtCore.QObject.connect(self.btn1, QtCore.SIGNAL(_fromUtf8("clicked()")), self.qwtPlot.update)
         QtCore.QObject.connect(self.btn2, QtCore.SIGNAL(_fromUtf8("clicked()")), self.qwtPlot.update)
         QtCore.QObject.connect(self.Exit, QtCore.SIGNAL(_fromUtf8("clicked()")), Form.close)
-        QtCore.QObject.connect(self.filter_check, QtCore.SIGNAL(_fromUtf8("stateChanged(int)")), self.qwtPlot_3.update)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -102,6 +107,8 @@ class Ui_Form(object):
         self.pushButton_2.setText(_translate("Form", "Refresh", None))
         self.btn3.setText(_translate("Form", "FFT", None))
         self.filter_check.setText(_translate("Form", "Filter", None))
+        self.O1_check.setText(_translate("Form", "O1", None))
+        self.O2_check.setText(_translate("Form", "O2", None))
         self.label.setText(_translate("Form", "Data Display", None))
         self.label_3.setText(_translate("Form", "FFT Display", None))
         self.label_4.setText(_translate("Form", "Alpha Power", None))
@@ -118,3 +125,4 @@ if __name__ == "__main__":
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())
+
