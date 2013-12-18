@@ -13,15 +13,15 @@ import random
 
 class Window(QtGui.QWidget):
 
-    def __init__(self, parent=None):
+    def __init__(self, figure ,parent=None):
         super(Window, self).__init__(parent)
 
         # a figure instance to plot on
-        self.figure = plt.figure()
+        self.figure = figure
 
-        win_plot = ui_plot_form.QtGui.QMainWindow()
-        uiplot = ui_plot_form.Ui_Form()
-        uiplot.setupUi(win_plot)
+        # win_plot = ui_plot_form.QtGui.QMainWindow()
+        # uiplot = ui_plot_form.Ui_Form()
+        # uiplot.setupUi(win_plot)
 
         # this is the Canvas Widget that displays the `figure`
         # it takes the `figure` instance as a parameter to __init__
@@ -42,6 +42,8 @@ class Window(QtGui.QWidget):
         # layout.addWidget(self.canvas)
         # layout.addWidget(self.button)
         self.setLayout(layout)
+        self.figure.canvas.draw()
+        self.plot
 
     def plot(self, data):
         ''' plot some random stuff '''
@@ -50,23 +52,23 @@ class Window(QtGui.QWidget):
 
         self.data_an = data
         rects = plt.bar(range(N), self.data_an, align='center')
-        print "Bleh"
+        
 
         for rect, h in zip(rects, self.data_an):
             rect.set_height(h)
-        # fig.canvas.draw()
+        fig.canvas.draw()
 
-        # create an axis
-        ax = self.figure.add_subplot(111)
+        # # create an axis
+        # ax = self.figure.add_subplot(111)
 
-        # discards the old graph
-        ax.hold(False)
+        # # discards the old graph
+        # ax.hold(False)
 
-        # plot data
-        ax.plot(data, '*-')
+        # # plot data
+        # ax.plot(data, '*-')
 
-        # refresh canvas
-        self.canvas.draw()
+        # # refresh canvas
+        # self.canvas.draw()
 
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)

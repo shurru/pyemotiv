@@ -22,10 +22,11 @@ class EEGRecorder:
         self.threadsDieNow = False  # threading
         self.newRecord = False
         self.ys = numpy.array([0 for i in xrange(0, 512)])
+        self.alpha= numpy.array([0 for k in xrange(0,0)])
         self.chan = chan
-        self.filter_checker=False
-        self.fftcheck= False
-        self.plot_check=True
+        self.filter_checker = False
+        self.fftcheck = False
+        self.plot_check = True
 
     # RECORDING THE EEG stream ###
     # get the EEG signal. Getting the raw EEG data and appending to ys
@@ -43,7 +44,7 @@ class EEGRecorder:
 
     def record(self, forever=True):
         #epocrec = Epoc()
-        #epocrec.connect()  
+        # epocrec.connect()
 
         while True:
             if self.threadsDieNow:
@@ -69,48 +70,59 @@ class EEGRecorder:
             # import time
             # time.sleep(0.015)
 
-
-
             if not forever:
                 break
 
         # MATH ###
 
-    def animate(self, data): 
+    def animate(self, data):
         fig = plt.figure()
-        N=1
+        N = 1
 
-        self.data_an= data
+        self.data_an = data
         rects = plt.bar(range(N), self.data_an, align='center')
 
         for rect, h in zip(rects, self.data_an):
             rect.set_height(h)
+
+        ax = fig.add_subplot(111)
+
+        # discards the old graph
+        ax.hold(False)
+
+        # plot data
+        # ax.plot()
+
+        # refresh canvas
         fig.canvas.draw()
-        
-        return fig 
+
+        return fig
 
     def fft(self):
-        self.fftcheck=True
-        self.plot_check=False 
+        self.fftcheck = True
+        self.plot_check = False
         fs = 128
         pwr, freqs = mlab.psd(self.ys, Fs=fs, scale_by_freq=False)
         # pwr= 10*numpy.log10(numpy.abs(pwr))
 
         # lolol high pass. Filters until 3 Hz.
-        if self.filter_checker==False: 
+        if self.filter_checker == False:
             for i in xrange(0, 6):
                 pwr[i] = 0
 
-        elif self.filter_checker== True: 
+        elif self.filter_checker == True:
             for i in xrange(0, 6):
                 pwr[i] = 0
-            for j in xrange(61,129): 
-                pwr[j]=0
-
-        
+            for j in xrange(61, 129):
+                pwr[j] = 0
 
         return freqs, pwr
 
-    
+    def alpha_plot(self,alphapwr): 
+        if len(self.alpha)>100:
+            self.alpha= numpy.array([0 for k in xrange(0,0)])
+        self.alpha=numpy.append(self.alpha, alphapwr)
+        #self.alpha= numpy.roll(self.alpha, 5)
+        return self.alpha          
 
 

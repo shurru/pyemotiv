@@ -44,7 +44,14 @@ def fftplot():
     for i in xrange(0, len(pwr)):
         if freq[i] < 13 and freq[i] > 7:
             alpha_pwr.append(pwr[i])
-    max_alpha.append( max(alpha_pwr))
+    max_alpha.append(max(alpha_pwr))
+    #print max_alpha
+
+    x= numpy.arange(0,100)
+    y=epoc.alpha_plot(max_alpha)
+    e.setData(x,y )
+    uiplot.qwtPlot_3.replot()
+    
     #max_alpha= max(alpha_pwr)
 
     #print max_alpha
@@ -52,10 +59,13 @@ def fftplot():
 
     # so we know this works
     #now we need to see how to put this on to the widget. It's a matplotlib figure now
-    epoc.animate(max_alpha) #this returns a figure which needs to be plotted in the widget
+    # e=epoc.animate(max_alpha) #this returns a figure which needs to be plotted in the widget
+
+
+    # # e.show()
     
-    #mw = ex2.Window()
-    # mw.plot(max_alpha)
+    # mw = ex2.Window(e)
+    # # mw.plot(max_alpha)
     # mw.show()
     # import time 
     # time.sleep(0.01)
@@ -153,7 +163,8 @@ def main():
     d.attach(uiplot.qwtPlot_2)
 
     # creating a bar graph
-    
+    e= Qwt.QwtPlotCurve()
+    e.attach(uiplot.qwtPlot_3)
 
 
 
@@ -165,7 +176,7 @@ def main():
     uiplot.qwtPlot.setAxisScale(uiplot.qwtPlot.yLeft, 0, 6000)
     uiplot.qwtPlot_2.setAxisScale(uiplot.qwtPlot_2.xBottom, 0, 64)
     #uiplot.qwtPlot_2.setAxisScale(uiplot.qwtPlot_2.yLeft, 0, 1e6)
-    #uiplot.qwtPlot_3.setAxisScale(uiplot.qwtPlot_3.xBottom, 0, 1)
+    uiplot.qwtPlot_3.setAxisScale(uiplot.qwtPlot_3.xBottom, 0, 100)
     # uiplot.qwtPlot_3.setAxisAutoScale(uiplot.qwtPlot_2.yLeft, 0, 10000)
     uiplot.qwtPlot_2.setAxisAutoScale(1)
    

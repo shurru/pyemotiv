@@ -87,9 +87,10 @@ class Ui_Form(object):
         self.label_6 = QtGui.QLabel(Form)
         self.label_6.setGeometry(QtCore.QRect(540, 600, 51, 20))
         self.label_6.setObjectName(_fromUtf8("label_6"))
-        self.alpha_widget = QtGui.QWidget(Form)
-        self.alpha_widget.setGeometry(QtCore.QRect(20, 360, 291, 241))
-        self.alpha_widget.setObjectName(_fromUtf8("alpha_widget"))
+        self.qwtPlot_3 = Qwt5.QwtPlot(Form)
+        self.qwtPlot_3.setGeometry(QtCore.QRect(20, 360, 291, 241))
+        self.qwtPlot_3.setObjectName(_fromUtf8("qwtPlot_3"))
+        
 
         self.retranslateUi(Form)
         QtCore.QObject.connect(self.btn1, QtCore.SIGNAL(_fromUtf8("clicked()")), self.qwtPlot.update)
