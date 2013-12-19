@@ -12,7 +12,7 @@ import matplotlib
 # global epoc
 
 def plotSomething():
-    if epoc.newRecord == False or epoc.fftcheck == True or epoc.plot_check == False:
+    if epoc.newRecord == False or epoc.fftcheck == True or epoc.plot_check == False or epoc.stop==True:
         return
 
     xs = numpy.arange(0, 511)
@@ -20,18 +20,20 @@ def plotSomething():
     c.setData(xs, epoc.ys)
     uiplot.qwtPlot.replot()
 
-    epoc.newRecord = False
+    #epoc.newRecord = False
 
 
 def contplot():
     epoc.threadsDieNow = False
     epoc.newRecord = True
     epoc.plot_check = True
+    epoc.fftcheck= False
+    epoc.stop= False
     win_plot.connect(uiplot.timer, QtCore.SIGNAL('timeout()'), plotSomething)
 
 
 def fftplot():
-    if epoc.newRecord == False:
+    if epoc.newRecord == False or epoc.fftcheck == False or epoc.plot_check == True or epoc.stop==True:
         return
 
     freq, pwr = epoc.fft()
@@ -52,57 +54,13 @@ def fftplot():
     e.setData(x,y )
     uiplot.qwtPlot_3.replot()
     
-    #max_alpha= max(alpha_pwr)
-
-    #print max_alpha
     
+    #epoc.newRecord = False
 
-    # so we know this works
-    #now we need to see how to put this on to the widget. It's a matplotlib figure now
-    # e=epoc.animate(max_alpha) #this returns a figure which needs to be plotted in the widget
+def stopplot(): 
+    epoc.stop= True
 
-
-    # # e.show()
-    
-    # mw = ex2.Window(e)
-    # # mw.plot(max_alpha)
-    # mw.show()
-    # import time 
-    # time.sleep(0.01)
-    #print "why you being a bitch"
-    #mw.attach(uiplot.qwtPlot_3)
-    # subplot = mw.getFigure().add_subplot(111)
-    # subplot.plot()
-    #mw.draw()
-
-    #e.paintEvent()
-    # qp = QtGui.QPainter()
-    # #e= uiplot.qwtplot_3
-    # qp.begin(e)
-    # qp.drawRect(10, 15, 90, max_alpha[0])
-    
-    # e=bardraw.BarCurve(max_alpha)
-    # #e.create_main_frame()
-    # e.show()
-
-
-   
-    
-   
-    # qp=QtGui.QPainter()
-    # qp.setBrush(QtGui.QColor(200, 0, 0))
-    # qp.drawRect(10, 330, 30, max_alpha)
-
-    
-    #e.attach(uiplot.qwtPlot_3)
-    # e.setData([0,1], max_alpha)
-    # e.drawFromTo(qp,0, max_alpha, 0, 1)
-    # print max(pwr)
-    # if max_alpha> max(pwr):
-    #     print "OMG Pain!"
-
-    epoc.newRecord = False
-
+    print "Stopped"
 
 def filtercheck():
     state = uiplot.filter_check.checkState()
@@ -128,7 +86,9 @@ def filtercheck():
 
 def contfftplot():
     epoc.fftcheck = True
+    epoc.plot_check= False
     epoc.newRecord = True
+
 
     win_plot.connect(uiplot.timer, QtCore.SIGNAL('timeout()'), fftplot)
 
@@ -150,10 +110,12 @@ def main():
     uiplot.setupUi(win_plot)
 
     # when buttonB is clicked, want it to stop
-    uiplot.btn2.clicked.connect(epoc.continuousEnd)
+    
     uiplot.btn1.clicked.connect(contplot)
+    uiplot.btn2.clicked.connect(stopplot)
     uiplot.btn3.clicked.connect(contfftplot)
     uiplot.filter_check.stateChanged.connect(filtercheck)
+    uiplot.Exitbtn.clicked.connect(epoc.continuousEnd)
 
     # uiplot.pushButton_2.clicked.connect(epoc.batt)
     c = Qwt.QwtPlotCurve()

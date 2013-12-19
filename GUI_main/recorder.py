@@ -27,6 +27,7 @@ class EEGRecorder:
         self.filter_checker = False
         self.fftcheck = False
         self.plot_check = True
+        self.stop= False
 
     # RECORDING THE EEG stream ###
     # get the EEG signal. Getting the raw EEG data and appending to ys
@@ -99,8 +100,7 @@ class EEGRecorder:
         return fig
 
     def fft(self):
-        self.fftcheck = True
-        self.plot_check = False
+       
         fs = 128
         pwr, freqs = mlab.psd(self.ys, Fs=fs, scale_by_freq=False)
         # pwr= 10*numpy.log10(numpy.abs(pwr))
