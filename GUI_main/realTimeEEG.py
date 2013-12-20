@@ -31,6 +31,10 @@ def contplot():
     epoc.stop= False
     win_plot.connect(uiplot.timer, QtCore.SIGNAL('timeout()'), plotSomething)
 
+def txtChange(text):
+    
+    uiplot.painedit.setText(text)
+    uiplot.painedit.adjustSize() 
 
 def fftplot():
     if epoc.newRecord == False or epoc.fftcheck == False or epoc.plot_check == True or epoc.stop==True:
@@ -42,18 +46,29 @@ def fftplot():
 
     alpha_pwr = []
     max_alpha=[]
-    
+    pwr2=[]
     for i in xrange(0, len(pwr)):
         if freq[i] < 13 and freq[i] > 7:
             alpha_pwr.append(pwr[i])
     max_alpha.append(max(alpha_pwr))
     #print max_alpha
 
+    for i in xrange(0, len(freq)): 
+        if freq[i]<30 and freq[i]>3: 
+            pwr2.append(pwr[i])
+
+    if max(alpha_pwr)>= max(pwr2): 
+        txtChange("High Alpha Power")
+
+    else: 
+        txtChange("Low Alpha Power")
+
     x= numpy.arange(0,100)
     y=epoc.alpha_plot(max_alpha)
     e.setData(x,y )
     uiplot.qwtPlot_3.replot()
     
+
     
     #epoc.newRecord = False
 
@@ -115,7 +130,7 @@ def main():
     uiplot.btn2.clicked.connect(stopplot)
     uiplot.btn3.clicked.connect(contfftplot)
     uiplot.filter_check.stateChanged.connect(filtercheck)
-    uiplot.Exitbtn.clicked.connect(epoc.continuousEnd)
+    uiplot.Exit.clicked.connect(epoc.continuousEnd)
 
     # uiplot.pushButton_2.clicked.connect(epoc.batt)
     c = Qwt.QwtPlotCurve()

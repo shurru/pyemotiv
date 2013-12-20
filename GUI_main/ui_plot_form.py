@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '.\GUI_change.ui'
 #
-# Created: Tue Dec 17 18:46:54 2013
+# Created: Fri Dec 20 17:19:39 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -45,9 +45,9 @@ class Ui_Form(object):
         self.btn2 = QtGui.QPushButton(self.frame)
         self.btn2.setGeometry(QtCore.QRect(150, 240, 111, 23))
         self.btn2.setObjectName(_fromUtf8("btn2"))
-        self.Exitbtn = QtGui.QPushButton(self.frame)
-        self.Exitbtn.setGeometry(QtCore.QRect(150, 270, 101, 23))
-        self.Exitbtn.setObjectName(_fromUtf8("Exit"))
+        self.Exit = QtGui.QPushButton(self.frame)
+        self.Exit.setGeometry(QtCore.QRect(150, 270, 101, 23))
+        self.Exit.setObjectName(_fromUtf8("Exit"))
         self.btn1 = QtGui.QPushButton(self.frame)
         self.btn1.setGeometry(QtCore.QRect(0, 240, 141, 23))
         self.btn1.setObjectName(_fromUtf8("btn1"))
@@ -63,12 +63,12 @@ class Ui_Form(object):
         self.filter_check = QtGui.QCheckBox(self.frame)
         self.filter_check.setGeometry(QtCore.QRect(200, 100, 70, 17))
         self.filter_check.setObjectName(_fromUtf8("filter_check"))
-        self.O1_check = QtGui.QCheckBox(self.frame)
-        self.O1_check.setGeometry(QtCore.QRect(200, 150, 70, 17))
-        self.O1_check.setObjectName(_fromUtf8("O1_check"))
-        self.O2_check = QtGui.QCheckBox(self.frame)
-        self.O2_check.setGeometry(QtCore.QRect(200, 170, 70, 17))
-        self.O2_check.setObjectName(_fromUtf8("O2_check"))
+        self.O1_radio = QtGui.QRadioButton(self.frame)
+        self.O1_radio.setGeometry(QtCore.QRect(190, 160, 82, 17))
+        self.O1_radio.setObjectName(_fromUtf8("O1_radio"))
+        self.O2_radio = QtGui.QRadioButton(self.frame)
+        self.O2_radio.setGeometry(QtCore.QRect(190, 180, 82, 17))
+        self.O2_radio.setObjectName(_fromUtf8("O2_radio"))
         self.label = QtGui.QLabel(Form)
         self.label.setGeometry(QtCore.QRect(320, 10, 71, 16))
         self.label.setObjectName(_fromUtf8("label"))
@@ -88,28 +88,30 @@ class Ui_Form(object):
         self.label_6.setGeometry(QtCore.QRect(540, 600, 51, 20))
         self.label_6.setObjectName(_fromUtf8("label_6"))
         self.qwtPlot_3 = Qwt5.QwtPlot(Form)
-        self.qwtPlot_3.setGeometry(QtCore.QRect(20, 360, 291, 241))
+        self.qwtPlot_3.setGeometry(QtCore.QRect(20, 380, 281, 221))
         self.qwtPlot_3.setObjectName(_fromUtf8("qwtPlot_3"))
-        
+        self.painedit = QtGui.QLineEdit(Form)
+        self.painedit.setGeometry(QtCore.QRect(100, 330, 113, 20))
+        self.painedit.setObjectName(_fromUtf8("painedit"))
 
         self.retranslateUi(Form)
         QtCore.QObject.connect(self.btn1, QtCore.SIGNAL(_fromUtf8("clicked()")), self.qwtPlot.update)
         QtCore.QObject.connect(self.btn2, QtCore.SIGNAL(_fromUtf8("clicked()")), self.qwtPlot.update)
-        QtCore.QObject.connect(self.Exitbtn, QtCore.SIGNAL(_fromUtf8("clicked()")), Form.close)
+        QtCore.QObject.connect(self.Exit, QtCore.SIGNAL(_fromUtf8("clicked()")), Form.close)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        Form.setWindowTitle(_translate("Form", "Form", None))
+        Form.setWindowTitle(_translate("Form", "GUI", None))
         self.pushButton.setText(_translate("Form", "Check Signal Quality", None))
         self.btn2.setText(_translate("Form", "Stop Recording", None))
-        self.Exitbtn.setText(_translate("Form", "Exit", None))
+        self.Exit.setText(_translate("Form", "Exit", None))
         self.btn1.setText(_translate("Form", "Start Recording", None))
         self.label_2.setText(_translate("Form", "Battery Level", None))
         self.pushButton_2.setText(_translate("Form", "Refresh", None))
         self.btn3.setText(_translate("Form", "FFT", None))
         self.filter_check.setText(_translate("Form", "Filter", None))
-        self.O1_check.setText(_translate("Form", "O1", None))
-        self.O2_check.setText(_translate("Form", "O2", None))
+        self.O1_radio.setText(_translate("Form", "O1", None))
+        self.O2_radio.setText(_translate("Form", "O2", None))
         self.label.setText(_translate("Form", "Data Display", None))
         self.label_3.setText(_translate("Form", "FFT Display", None))
         self.label_4.setText(_translate("Form", "Alpha Power", None))
