@@ -99,6 +99,12 @@ class EEGRecorder:
 
         return fig
 
+    def bandpass_firwin(ntaps, lowcut, highcut, fs, window='hamming'):
+        nyq = 0.5 * fs
+        taps = scipy.signal.firwin(ntaps, [lowcut, highcut], nyq=nyq, pass_zero=False,
+                      window=window, scale=False)
+        return taps
+
     def fft(self):
        
         fs = 128
@@ -107,14 +113,15 @@ class EEGRecorder:
 
         # lolol high pass. Filters until 3 Hz.
         if self.filter_checker == False:
-            for i in xrange(0, 6):
+            for i in xrange(0, 4):
                 pwr[i] = 0
 
         elif self.filter_checker == True:
-            for i in xrange(0, 6):
-                pwr[i] = 0
-            for j in xrange(61, 129):
-                pwr[j] = 0
+            
+            # for i in xrange(0, 6):
+            #     pwr[i] = 0
+            # for j in xrange(61, 129):
+            #     pwr[j] = 0
 
         return freqs, pwr
 
