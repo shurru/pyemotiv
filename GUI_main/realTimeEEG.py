@@ -8,6 +8,8 @@ from PyQt4 import QtCore, QtGui
 import PyQt4.Qwt5 as Qwt
 from pyemotiv import Epoc
 import matplotlib
+import xivelytry
+
 
 # global epoc
 
@@ -19,7 +21,10 @@ def plotSomething():
 
     c.setData(xs, epoc.ys)
     uiplot.qwtPlot.replot()
-
+    update= int(epoc.ys[508])
+    xivelytry.updata(update)
+    
+    
     #epoc.newRecord = False
 
 
@@ -30,6 +35,7 @@ def contplot():
     epoc.fftcheck= False
     epoc.stop= False
     win_plot.connect(uiplot.timer, QtCore.SIGNAL('timeout()'), plotSomething)
+
 
 def txtChange(text):
     
@@ -142,7 +148,6 @@ def main():
     # creating a bar graph
     e= Qwt.QwtPlotCurve()
     e.attach(uiplot.qwtPlot_3)
-
 
 
 

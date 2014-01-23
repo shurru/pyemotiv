@@ -1,5 +1,5 @@
 from pyemotiv import Epoc
-
+import sys
 import matplotlib
 import matplotlib.pyplot as plt
 matplotlib.use('TkAgg')  # <-- THIS MAKES IT FAST!
@@ -11,6 +11,13 @@ import threading
 import pylab
 import struct
 import matplotlib.mlab as mlab
+import xively
+import time
+import datetime
+
+
+XIVELY_API_KEY= "OXrsK9MwFkcLIJvMRlAouni0TBSYPbT2ZU3tuPpP2uqTZfxi"
+XIVELY_FEED_ID= 146826075
 
 
 class EEGRecorder:
@@ -74,30 +81,24 @@ class EEGRecorder:
             if not forever:
                 break
 
+                
+
         # MATH ###
 
-    def animate(self, data):
-        fig = plt.figure()
-        N = 1
 
-        self.data_an = data
-        rects = plt.bar(range(N), self.data_an, align='center')
+    def updata(self):
+       
+        api = xively.XivelyAPIClient(XIVELY_API_KEY)
+        feed = api.feeds.get(XIVELY_FEED_ID)
+        O1= self.ys[508]
+        now = datetime.datetime.utcnow()
+        feed.datastreams = [
+            xively.Datastream(id='tmpr', current_value=O1, at=now),
+            # xively.Datastream(id='watts', current_value=watts, at=now),
+        ]
+        feed.update()
+        print O1
 
-        for rect, h in zip(rects, self.data_an):
-            rect.set_height(h)
-
-        ax = fig.add_subplot(111)
-
-        # discards the old graph
-        ax.hold(False)
-
-        # plot data
-        # ax.plot()
-
-        # refresh canvas
-        fig.canvas.draw()
-
-        return fig
 
     def bandpass_firwin(ntaps, lowcut, highcut, fs, window='hamming'):
         nyq = 0.5 * fs
@@ -118,10 +119,10 @@ class EEGRecorder:
 
         elif self.filter_checker == True:
             
-            # for i in xrange(0, 6):
-            #     pwr[i] = 0
-            # for j in xrange(61, 129):
-            #     pwr[j] = 0
+            for i in xrange(0, 6):
+                pwr[i] = 0
+            for j in xrange(61, 129):
+                pwr[j] = 0
 
         return freqs, pwr
 
