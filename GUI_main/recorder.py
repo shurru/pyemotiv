@@ -11,7 +11,7 @@ import threading
 import pylab
 import struct
 import matplotlib.mlab as mlab
-import xively
+import thingspeak
 import time
 import datetime
 
@@ -38,6 +38,10 @@ class EEGRecorder:
 
     # RECORDING THE EEG stream ###
     # get the EEG signal. Getting the raw EEG data and appending to ys
+
+    def continuousTrans(self): 
+        self.thr= threading.Thread(target=self.update)
+        self.thr.start()
 
     def continuousStart(self):
         """CALL THIS to start running forever."""
@@ -84,20 +88,28 @@ class EEGRecorder:
                 
 
         # MATH ###
+    def update(self): 
+        while True: 
+            for i in xrange(508, 511):
+                 update= int(self.ys[i])
+        # xivelytry.updata(update)
+                 thingspeak.doit(update)
+                 # print self.ys[i], update
 
 
-    def updata(self):
+
+    # def updata(self):
        
-        api = xively.XivelyAPIClient(XIVELY_API_KEY)
-        feed = api.feeds.get(XIVELY_FEED_ID)
-        O1= self.ys[508]
-        now = datetime.datetime.utcnow()
-        feed.datastreams = [
-            xively.Datastream(id='tmpr', current_value=O1, at=now),
-            # xively.Datastream(id='watts', current_value=watts, at=now),
-        ]
-        feed.update()
-        print O1
+    #     api = xively.XivelyAPIClient(XIVELY_API_KEY)
+    #     feed = api.feeds.get(XIVELY_FEED_ID)
+    #     O1= self.ys[508]
+    #     now = datetime.datetime.utcnow()
+    #     feed.datastreams = [
+    #         xively.Datastream(id='tmpr', current_value=O1, at=now),
+    #         # xively.Datastream(id='watts', current_value=watts, at=now),
+    #     ]
+    #     feed.update()
+    #     print O1
 
 
     def bandpass_firwin(ntaps, lowcut, highcut, fs, window='hamming'):

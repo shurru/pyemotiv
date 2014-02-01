@@ -8,7 +8,10 @@ from PyQt4 import QtCore, QtGui
 import PyQt4.Qwt5 as Qwt
 from pyemotiv import Epoc
 import matplotlib
-import xivelytry
+# import xivelytry
+import thingspeak
+import dialog
+import time
 
 
 # global epoc
@@ -21,8 +24,6 @@ def plotSomething():
 
     c.setData(xs, epoc.ys)
     uiplot.qwtPlot.replot()
-    update= int(epoc.ys[508])
-    xivelytry.updata(update)
     
     
     #epoc.newRecord = False
@@ -77,6 +78,20 @@ def fftplot():
 
     
     #epoc.newRecord = False
+def save(): 
+    # dlg= dialog_.Example()
+    
+    dlg = dialog.QtGui.QDialog()
+    ui = dialog.Ui_Dialog()
+    ui.setupUi(dlg)
+    dlg.show()
+    # dlg= dialog.Ui_Dialog()
+    # win_dlg= dialog.QtGui.QDialog()
+    # dlg.setupUi(win_dlg)
+    # dlg.show()
+    print "save"
+
+
 
 def stopplot(): 
     epoc.stop= True
@@ -125,6 +140,7 @@ def main():
     #epoc2 = EEGRecorder(10)
 
     epoc.continuousStart()  # should start the record function
+    epoc.continuousTrans()
 
     win_plot = ui_plot_form.QtGui.QMainWindow()
     uiplot = ui_plot_form.Ui_Form()
@@ -135,6 +151,7 @@ def main():
     uiplot.btn1.clicked.connect(contplot)
     uiplot.btn2.clicked.connect(stopplot)
     uiplot.btn3.clicked.connect(contfftplot)
+    uiplot.save_btn.clicked.connect(save)
     uiplot.filter_check.stateChanged.connect(filtercheck)
     uiplot.Exit.clicked.connect(epoc.continuousEnd)
 

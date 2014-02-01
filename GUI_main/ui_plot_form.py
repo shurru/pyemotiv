@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '.\GUI_change.ui'
 #
-# Created: Fri Jan 17 10:21:28 2014
+# Created: Mon Jan 27 10:45:59 2014
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -43,10 +43,10 @@ class Ui_Form(object):
         self.BatteryLevel.setProperty("value", 80)
         self.BatteryLevel.setObjectName(_fromUtf8("BatteryLevel"))
         self.btn2 = QtGui.QPushButton(self.frame)
-        self.btn2.setGeometry(QtCore.QRect(270, 40, 111, 23))
+        self.btn2.setGeometry(QtCore.QRect(250, 40, 141, 23))
         self.btn2.setObjectName(_fromUtf8("btn2"))
         self.Exit = QtGui.QPushButton(self.frame)
-        self.Exit.setGeometry(QtCore.QRect(400, 40, 101, 23))
+        self.Exit.setGeometry(QtCore.QRect(360, 70, 101, 23))
         self.Exit.setObjectName(_fromUtf8("Exit"))
         self.btn1 = QtGui.QPushButton(self.frame)
         self.btn1.setGeometry(QtCore.QRect(250, 10, 141, 23))
@@ -66,6 +66,9 @@ class Ui_Form(object):
         self.chan_check = QtGui.QCheckBox(self.frame)
         self.chan_check.setGeometry(QtCore.QRect(140, 30, 101, 17))
         self.chan_check.setObjectName(_fromUtf8("chan_check"))
+        self.save_btn = QtGui.QPushButton(self.frame)
+        self.save_btn.setGeometry(QtCore.QRect(400, 40, 141, 23))
+        self.save_btn.setObjectName(_fromUtf8("save_btn"))
         self.label = QtGui.QLabel(Form)
         self.label.setGeometry(QtCore.QRect(10, 0, 71, 16))
         self.label.setObjectName(_fromUtf8("label"))
@@ -119,7 +122,7 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        Form.setWindowTitle(_translate("Form", "Form", None))
+        Form.setWindowTitle(_translate("Form", "GUI", None))
         self.pushButton.setText(_translate("Form", "Check Signal Quality", None))
         self.btn2.setText(_translate("Form", "Stop Recording", None))
         self.Exit.setText(_translate("Form", "Exit", None))
@@ -129,6 +132,7 @@ class Ui_Form(object):
         self.btn3.setText(_translate("Form", "FFT", None))
         self.filter_check.setText(_translate("Form", "Filter", None))
         self.chan_check.setText(_translate("Form", "Change Channel", None))
+        self.save_btn.setText(_translate("Form", "Save", None))
         self.label.setText(_translate("Form", "O1 Display", None))
         self.label_3.setText(_translate("Form", "O2 Display", None))
         self.label_4.setText(_translate("Form", "Alpha Power O1", None))
