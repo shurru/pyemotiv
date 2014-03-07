@@ -4,10 +4,10 @@ from time import localtime, strftime
 # import psutil
 import time
 
-def doit(val):
+def doit(val, val2):
         cpu_pc = val
         mem_avail_mb = val       
-        params = urllib.urlencode({'field1': cpu_pc, 'field2': mem_avail_mb,'key':'ZJWC574G3Y45TWB3'})
+        params = urllib.urlencode({'field1': cpu_pc, 'field3': val2,'key':'ZJWC574G3Y45TWB3'})
         headers = {"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}
         conn = httplib.HTTPConnection("api.thingspeak.com:80")
         

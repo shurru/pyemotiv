@@ -35,6 +35,7 @@ class EEGRecorder:
         self.fftcheck = False
         self.plot_check = True
         self.stop= False
+        self.alp_val= 0
 
     # RECORDING THE EEG stream ###
     # get the EEG signal. Getting the raw EEG data and appending to ys
@@ -90,11 +91,14 @@ class EEGRecorder:
         # MATH ###
     def update(self): 
         while True: 
-            for i in xrange(508, 511):
+            for i in xrange(0, 511):
                  update= int(self.ys[i])
+                 randomarray=[]
+                 randomarray.append(update)
         # xivelytry.updata(update)
-                 thingspeak.doit(update)
-                 # print self.ys[i], update
+                 thingspeak.doit(randomarray, self.alp_val)
+                 # print update
+                 print self.ys[i], update
 
 
 

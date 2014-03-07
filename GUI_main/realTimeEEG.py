@@ -66,9 +66,11 @@ def fftplot():
 
     if max(alpha_pwr)>= max(pwr2): 
         txtChange("High Alpha Power")
+        epoc.alp_val= 1
 
     else: 
         txtChange("Low Alpha Power")
+        epoc.alp_val=0
 
     x= numpy.arange(0,100)
     y=epoc.alpha_plot(max_alpha)
